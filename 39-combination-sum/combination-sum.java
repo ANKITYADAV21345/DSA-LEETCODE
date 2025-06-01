@@ -1,31 +1,41 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 class Solution {
-    public List<List<Integer>> combinationSum(int[] candidates, int target) {
-        List<List<Integer>> res = new ArrayList<>();
-        ArrayList<Integer> cur = new ArrayList<>();
-        recur(candidates, target, 0, cur, res);
-        return res;
-    }
 
-    public void recur(int[] candidates, int target, int ind, ArrayList<Integer> cur, List<List<Integer>> res) {
-        // base case
-        if (ind == candidates.length) {
-            if (target == 0) {
-                res.add(new ArrayList<>(cur));
+    static Set<List<Integer>> set = new HashSet<>();
+
+    public static void getAllCombinations(int arr[], int idx, int target, List<List<Integer>> ans, List<Integer> combin) {
+        // base case 
+        if (idx == arr.length || target < 0) {
+            return;
+        }
+
+        if (target == 0) {
+            if (!set.contains(new ArrayList<>(combin))) {
+                set.add(new ArrayList<>(combin));
+                ans.add(new ArrayList<>(combin));  // Add to result
             }
             return;
         }
 
-        // pick
-        if (candidates[ind] <= target) {
-            cur.add(candidates[ind]);
-            recur(candidates, target - candidates[ind], ind, cur, res);
-            cur.remove(cur.size() - 1);
-        }
+        // include current number (single or multiple times)
+        combin.add(arr[idx]);
+        getAllCombinations(arr, idx + 1, target - arr[idx], ans, combin);  // single choice
+        getAllCombinations(arr, idx, target - arr[idx], ans, combin);      // multiple choice
+        combin.remove(combin.size() - 1); // backtrack
 
-        // no pick
-        recur(candidates, target, ind + 1, cur, res);
+        // exclude current number
+        getAllCombinations(arr, idx + 1, target, ans, combin);
+    }
+
+    public List<List<Integer>> combinationSum(int[] arr, int target) {
+        set.clear(); // clear static set to avoid stale data
+        List<List<Integer>> ans = new ArrayList<>();
+        List<Integer> combin = new ArrayList<>();
+        getAllCombinations(arr, 0, target, ans, combin);
+        return ans;
     }
 }
