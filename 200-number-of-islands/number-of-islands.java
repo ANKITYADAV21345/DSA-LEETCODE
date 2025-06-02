@@ -11,7 +11,7 @@ class Solution {
                 }
             }
         }
-        return count++;
+        return count;
     }
 
     public void solve(char [][] grid,int i,int j){
