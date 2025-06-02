@@ -8,7 +8,7 @@ class Solution {
 
     private boolean solve(char[][] board, int row, int col) {
         // Base case
-        if (row == 9) return true;
+        if (row == 9 && col==0) return true;
 
         // Next cell
         int nextRow = row, nextCol = col + 1;
