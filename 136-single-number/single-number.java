@@ -1,18 +1,14 @@
 class Solution {
-    public static int singleNumber(int nums[]){
-        int value=0;    //to store the valueinitialise it with 0
-        for(int i=0;i<nums.length;i++)//to scan the elements from left to right
-        {
-            value=value^nums[i];
+    public int singleNumber(int[] nums) {
+        
+        //variable to store the xor result of the number 
+        int single=nums[0];
+
+        //start the loop for all elements 
+        for (int i=1;i<nums.length;i++){
+            single=single^nums[i];
         }
-        return value;
+
+        return single;
     }
-
-
-    public static void main(String args[])  {
-        int nums[]={4,1,2,1,2};
-        System.out.println(singleNumber(nums));
-    }
-
-
 }
