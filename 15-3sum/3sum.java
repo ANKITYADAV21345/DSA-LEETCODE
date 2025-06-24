@@ -1,60 +1,37 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 class Solution {
-
     public List<List<Integer>> threeSum(int[] nums) {
-        List<List<Integer>> result = new ArrayList<>();
-        int n = nums.length;
 
-        if (n < 3) {
-            // If there are less than 3 elements, return empty list as per invalid_inputs
-            return result;
-        }
-
-        // Sort the array
+        if(nums==null || nums.length<3) return new ArrayList<>();
+        
+        //sort the elements
         Arrays.sort(nums);
+        Set<List<Integer>> result=new HashSet<>();
 
-        // Fixing 1st element (n1)
-        for (int i = 0; i < n ; i++) {
-            if (i > 0 && nums[i] == nums[i - 1]) {
-                // Skip duplicate n1 to avoid duplicate triplet
-                continue;
-            }
-            int n1 = nums[i];
-            int target = -n1;
+        //now fix the first element and find the other two elements
+        for(int i=0;i<nums.length-2;i++){
 
-            // Use twoSum method to find n2 and n3
-            twoSum(nums, target, i + 1, n - 1, result); // it will find n2 and n3; {n1, n2, n3}
-        }
-        return result;
-    }
+            //find other two elements using two sum approach
+            int left=i+1;
+            int right=nums.length-1;
 
-    // Method to find two numbers (n2 and n3) that sum up to target
-    public void twoSum(int[] nums, int target, int i, int j, List<List<Integer>> result) {
-        while (i < j) {
-            if (nums[i] + nums[j] > target) {
-                j--;
-            } else if (nums[i] + nums[j] < target) {
-                i++;
-            } else {
-                // Found a triplet (n1, nums[i], nums[j])
-                result.add(Arrays.asList(-target, nums[i], nums[j]));
+            while (left<right){
+                int sum=nums[i]+nums[left]+nums[right];
 
-                // Skip duplicates for nums[i]
-                while (i < j && nums[i] == nums[i + 1]) {
-                    i++;
+                if(sum==0){
+
+                    //add the set,and move to find other triplets
+                    result.add(Arrays.asList(nums[i],nums[left],nums[right]));
+                    left++;
+                    right--;
                 }
-                // Skip duplicates for nums[j]
-                while (i < j && nums[j] == nums[j - 1]) {
-                    j--;
+                else if(sum<0){
+                    left++;
                 }
-
-                // Move both pointers inward
-                i++;
-                j--;
+                else{
+                    right--;
+                }
             }
         }
+        return new ArrayList(result);
     }
 }
