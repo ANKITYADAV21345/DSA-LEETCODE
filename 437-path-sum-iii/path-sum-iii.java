@@ -37,5 +37,6 @@ class Solution {
         findPathSum(curr.left, sum, target, hm);
         findPathSum(curr.right, sum, target, hm);
         hm.put(sum, hm.get(sum) - 1); // Backtrack
+        return;
     }
 }
