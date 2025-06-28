@@ -13,6 +13,7 @@
  *     }
  * }
  */
+//nikhil lohia 
 public class Solution {
 
   boolean hasPathSum(TreeNode root, int sum) {
