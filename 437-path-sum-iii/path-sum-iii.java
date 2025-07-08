@@ -13,11 +13,6 @@
  *     }
  * }
  */
-
-
-
-//codebix
-
 class Solution {
     int total = 0;
 
