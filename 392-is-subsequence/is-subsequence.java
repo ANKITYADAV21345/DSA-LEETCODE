@@ -1,18 +1,23 @@
+//nikhil lohia
 class Solution {
-    public boolean isSubsequence(String s, String t) {
-        int p1=0,p2=0;
-        int n1=s.length();
-        int n2=t.length();
+    public boolean isSubsequence(String str1, String str2) {
+        // Initialize pointers for both strings
+        int i = 0;
+        int j = 0;
+        // We can iterate until either of them becomes zero...
 
-        while(p1<n1 && p2<n2){
-            if(s.charAt(p1)==t.charAt(p2)){
-                p1++;
-                p2++;
-            }
-            else{
-                p2++;
+        while (i < str1.length() && j < str2.length()) {
+            // Compare characters, increment both pointers if same
+            if (str1.charAt(i) == str2.charAt(j)) {
+                i++;
+                j++;
+            } else {
+                j++; // Only increment second pointer
             }
         }
-        return p1==n1;
+
+        // If it is a subsequence, 'i' will have travelled full
+        // length of string 'str1', so just check and return
+        return (i == str1.length());
     }
 }
