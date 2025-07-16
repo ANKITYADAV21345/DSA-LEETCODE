@@ -13,30 +13,42 @@
  *     }
  * }
  */
+
+
+
+ //nikhil lohia
 class Solution {
     public TreeNode buildTree(int[] preorder, int[] inorder) {
+        Map<Integer, Integer> inOrderIndexMap = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            inOrderIndexMap.put(inorder[i], i);
+        }
 
-         Map<Integer, Integer> inorderIndexMap = new HashMap<>();
+        return splitTree(preorder, inOrderIndexMap,
+                0, 0, inorder.length - 1);
+    }
 
-        for (int i = 0; i < inorder.length; i++)
-            inorderIndexMap.put(inorder[i], i);
+    private TreeNode splitTree(int[] preorder, Map<Integer, Integer> inOrderIndexMap,
+            int rootIndex, int left, int right) {
 
-        return splitTree(preorder, inorderIndexMap,0, 0, inorder.length - 1);
-  }
+        // Base case: invalid subtree
+        if (left > right || rootIndex >= preorder.length) {
+            return null;
+        }
 
-  private TreeNode splitTree(int[] preorder, Map<Integer, Integer> inorderIndexMap,
-                            int rootIndex, int left, int right) {
+        TreeNode root = new TreeNode(preorder[rootIndex]);
 
-    TreeNode root = new TreeNode(preorder[rootIndex]);
+        int mid = inOrderIndexMap.get(preorder[rootIndex]);
 
-    // Create left and right subtree
-    int mid = inorderIndexMap.get(preorder[rootIndex]);
-    if (mid > left)
-      root.left = splitTree(preorder, inorderIndexMap,
-          rootIndex + 1, left, mid - 1);
-    if (mid < right)
-      root.right = splitTree(preorder, inorderIndexMap,
-        rootIndex + mid - left + 1, mid + 1, right);
-    return root;
+        int leftSubtreeSize = mid - left;
+
+        // Recursively build left and right subtrees
+        root.left = splitTree(preorder, inOrderIndexMap,
+                rootIndex + 1, left, mid - 1);
+
+        root.right = splitTree(preorder, inOrderIndexMap,
+                rootIndex + leftSubtreeSize + 1, mid + 1, right);
+
+        return root;
     }
 }
