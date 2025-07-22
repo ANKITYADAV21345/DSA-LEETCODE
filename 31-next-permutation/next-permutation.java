@@ -1,4 +1,3 @@
-//APNA COLLEGE
 // input number 41532
 // idx 1-> traverse from right  to left
 //     a[i]<a[i+1]               idx 1=1
