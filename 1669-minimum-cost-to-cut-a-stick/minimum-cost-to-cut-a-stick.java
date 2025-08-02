@@ -1,6 +1,5 @@
 //codebix + chatgpt 
 
-
 import java.util.Arrays;
 
 class Solution {
