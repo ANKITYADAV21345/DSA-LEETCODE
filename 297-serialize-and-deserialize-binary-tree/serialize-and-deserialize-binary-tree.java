@@ -10,9 +10,9 @@
 public class Codec {
 
     // Encodes a tree to a single string.
-    
     public String serialize(TreeNode root) {
-        if (root == null) return "x";
+        if (root == null)
+            return "X";
         String leftSerialize = serialize(root.left);
         String rightSerialize = serialize(root.right);
         return root.val + "," + leftSerialize + "," + rightSerialize;
@@ -20,17 +20,22 @@ public class Codec {
 
     // Decodes your encoded data to tree.
     public TreeNode deserialize(String data) {
-        String[] arr = data.split(",");
+        String arr[] = data.split(",");
         Queue<String> q = new LinkedList<>();
-        Collections.addAll(q, arr);  // More efficient than a loop
-        return deserialize(q);
+        for (int i = 0; i < arr.length; i++)
+            q.add(arr[i]);
+
+        TreeNode root = deserialize(q);
+        return root;
     }
 
-    private TreeNode deserialize(Queue<String> q) {
-        if (q.isEmpty()) return null;
-        String val = q.poll();
-        if (val.equals("x")) return null;
-        TreeNode root = new TreeNode(Integer.parseInt(val));
+    private static TreeNode deserialize(Queue<String> q) {
+        if (q.size() == 0)
+            return null;
+        String peek = q.poll();
+        if (peek.equals("X"))
+            return null;
+        TreeNode root = new TreeNode(Integer.parseInt(peek));
         root.left = deserialize(q);
         root.right = deserialize(q);
         return root;
