@@ -1,34 +1,30 @@
-import java.util.Arrays;
-
+//apna college 
 class Solution {
     public int compress(char[] chars) {
         int n = chars.length;
-        int idx = 0; // index to place the characters in the modified array
-        int i = 0;   // pointer to traverse the original array
+        int idx = 0;
 
-        while (i < n) {
+        for (int i = 0; i < n; i++) {
             char ch = chars[i];
             int count = 0;
 
-            // Count the occurrences of the current character
             while (i < n && chars[i] == ch) {
                 count++;
                 i++;
             }
 
-            // Place the character
             chars[idx++] = ch;
 
-            // If the count is greater than 1, convert it to string and store each digit
             if (count > 1) {
-                String countStr = Integer.toString(count);
-                for (char digit : countStr.toCharArray()) {
+                String str = Integer.toString(count);
+                for (char digit : str.toCharArray()){
                     chars[idx++] = digit;
                 }
             }
+
+            i--; // adjust for the outer loop
         }
 
-        // Return the length of the compressed array
         return idx;
     }
 }
