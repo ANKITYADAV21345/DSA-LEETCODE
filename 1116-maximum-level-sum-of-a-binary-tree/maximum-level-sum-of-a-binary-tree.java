@@ -13,13 +13,16 @@
  *     }
  * }
  */
+
+
+ //keshav tyagi[bits mesra]
 class Solution {
     public int maxLevelSum(TreeNode root) {
         if(root==null){
             return 0;
         }
 
-        Queue<TreeNode> queue =new LinkedList<TreeNode>();
+        Queue<TreeNode> queue=new LinkedList<TreeNode>();
         queue.add(root);
         int maxLevelSum=Integer.MIN_VALUE;
         int ans=0;
@@ -30,7 +33,7 @@ class Solution {
             curLevel++;
             int curSum=0;
             for(int i=0;i<levelSize;i++){
-                TreeNode node=queue.poll();
+                TreeNode node =queue.poll();
 
                 curSum=curSum+node.val;
 
@@ -40,7 +43,6 @@ class Solution {
 
                 if(node.right!=null){
                     queue.add(node.right);
-
                 }
             }
 
