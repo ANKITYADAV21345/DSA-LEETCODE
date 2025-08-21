@@ -13,39 +13,25 @@
  *     }
  * }
  */
+
+
+ //apna college 
 class Solution {
+    private TreeNode nextRight = null;
+
     public void flatten(TreeNode root) {
-        if(root == null) return;
-        
-        TreeNode tempLeft = root.left;
-        TreeNode tempRight = root.right;
-        
+        if (root == null) {
+            return;
+        }
+
+        // Recurse on right subtree first
+        flatten(root.right);
+        // Then recurse on left subtree
+        flatten(root.left);
+
+        // Rearrange pointers
         root.left = null;
-        
-        flatten(tempLeft);
-        flatten(tempRight);
-        
-        root.right = tempLeft;
-        TreeNode current = root;
-        while(current.right != null) current = current.right;
-        current.right = tempRight;
-        
+        root.right = nextRight;
+        nextRight = root;
     }
 }
-
-// class Solution {
-//     public void flatten(TreeNode root) {
-//         if(root == null) return;
-//         while(root != null){
-//             if(root.left != null) {
-//                 TreeNode left = root.left;
-//                 TreeNode current = left;
-//                 while(current.right != null) current = current.right;
-//                 current.right = root.right;  // Morris Traversal main step
-//                 root.left =null;
-//                 root.right = left;
-//             }
-//             root = root.right;
-//         }
-//     }
-// }
