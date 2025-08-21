@@ -15,40 +15,38 @@
  */
 
 
-import java.util.*;
 
+ //engeniering digest
 class Solution {
-
-    // Inserts a value into a BST and returns the updated root
-    public TreeNode insert(TreeNode root, int val) {
-        if (root == null) {
-            return new TreeNode(val);
-        }
-
-        if (val < root.val) {
-            root.left = insert(root.left, val);
-        } else {
-            root.right = insert(root.right, val);
-        }
-
-        return root;
-    }
-
-    // Performs inorder traversal and returns the result as a list
     public List<Integer> inorderTraversal(TreeNode root) {
-        List<Integer> result = new ArrayList<>();
-        inorderHelper(root, result);
-        return result;
+        List<Integer> res = new ArrayList();
+        Stack<TreeNode> stack = new Stack();
+        TreeNode curr = root;
+        while(curr != null || !stack.isEmpty()){
+            while(curr != null){
+                stack.push(curr);
+                curr = curr.left;
+            }
+            curr = stack.pop();
+            res.add(curr.val);
+            curr = curr.right;
+        }
+        return res;
     }
+}
 
-    // Helper method for inorder traversal
-    private void inorderHelper(TreeNode root, List<Integer> result) {
-        if (root == null) {
+class Solution_ {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList();
+        helper(root, res);
+        return res;
+    }
+    private void helper(TreeNode root, List<Integer> res){
+        if(root == null){
             return;
         }
-
-        inorderHelper(root.left, result);
-        result.add(root.val);
-        inorderHelper(root.right, result);
+        helper(root.left, res);
+        res.add(root.val);
+        helper(root.right, res);
     }
 }
