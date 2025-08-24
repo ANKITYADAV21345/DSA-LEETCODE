@@ -1,78 +1,26 @@
-//codebix
-
-
-//tabular methord
 class Solution {
+    public static int solve(int i, int j, int m, int n, int[][] memo) {
+        // Base case: if we go out of bounds, return 0
+        if (i >= m || j >= n) return 0;
+        // Base case: if we reach the bottom-right corner, return 1
+        if (i == m - 1 && j == n - 1) return 1;
+        // Return the memoized result if it exists
+        if (memo[i][j] != -1) return memo[i][j];
 
-    public int uniquePaths(int m, int n) {
-        int[][] dp = new int[m][n];
+        // Recursively calculate the number of unique paths from the current position
+        memo[i][j] = solve(i + 1, j, m, n, memo) + solve(i, j + 1, m, n, memo);
+        return memo[i][j];
+    }
 
-        // Initialize last column
-        for (int i = 0; i < m; i++) dp[i][n - 1] = 1;
-
-        // Initialize last row
-        for (int j = 0; j < n; j++) dp[m - 1][j] = 1;
-
-        // Fill the rest of the dp table
-        for (int i = m - 2; i >= 0; i--) {
-            for (int j = n - 2; j >= 0; j--) {
-                dp[i][j] = dp[i + 1][j] + dp[i][j + 1];
+    public static int uniquePaths(int m, int n) {
+        // Initialize memoization array
+        int[][] memo = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                memo[i][j] = -1; // Fill with -1 to indicate uncomputed values
             }
         }
-
-        return dp[0][0];
+        // Start the recursive calculation from the top-left corner
+        return solve(0, 0, m, n, memo);
     }
 }
-
-
-
-
-
-// class Solution {
-//     public int uniquePaths(int m, int n) {
-
-//         //RECURSION APROACH
-//         int ans = rec(0, 0, m - 1, n - 1);
-//         return ans;
-//     }
-
-//     public static int rec(int si, int sj, int ei, int ej) {
-//         if (si == ei && sj == ej)
-//             return 1;
-
-//         if (si > ei || sj > ej)
-//             return 0;
-
-//         int op1 = rec(si + 1, sj, ei, ej);
-//         int op2 = rec(si, sj + 1, ei, ej);
-//         return op1 + op2;
-//     }
-// }
-
-//optimisation using memoisation
-// class Solution {
-//     public int uniquePaths(int m, int n) {
-
-//         HashMap<String, Integer> mhm = new HashMap<>();
-//         int ans = memo(0, 0, m - 1, n - 1, mhm);
-//         return ans;
-//     }
-
-//     public static int memo(int si, int sj, int ei, int ej, HashMap<String, Integer> mhm) {
-//         if (si == ei && sj == ej)
-//             return 1;
-
-//         if (si > ei || sj > ej)
-//             return 0;
-
-//         String key = si + "#"+ sj;
-//         if (mhm.containsKey(key))
-//             return mhm.get(key);
-
-//         int op1 = memo(si + 1, sj, ei, ej, mhm);
-//         int op2 = memo(si, sj + 1, ei, ej, mhm);
-//         return op1 + op2;
-//     }
-// }
-
-
