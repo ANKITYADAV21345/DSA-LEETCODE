@@ -1,3 +1,5 @@
+//apna college gready algorithm notes
+
 class Solution {
     public int findLongestChain(int[][] pairs) {
         Arrays.sort(pairs,Comparator.comparingDouble(o->o[1]));
