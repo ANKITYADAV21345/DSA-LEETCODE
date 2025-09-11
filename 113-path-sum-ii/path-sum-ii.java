@@ -13,8 +13,7 @@
  *     }
  * }
  */
-
- //changes made from chatgpt from path sum 1 to path sum 2
+//changes made from chatgpt from path sum 1 to path sum 2
 public class Solution {
 
   public List<List<Integer>> pathSum(TreeNode root, int sum) {
