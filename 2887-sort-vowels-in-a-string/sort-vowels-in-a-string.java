@@ -15,8 +15,7 @@ class Solution {
         for(char c:result){
             if(c=='A'||c=='E'||c=='I'|| c=='O'||c=='U'||
                 c=='a'||c=='e'||c=='i'||c=='o'||c=='u'){
-                    ans.append(temp[j]);
-                    j++;
+                    ans.append(temp[j++]);
             }
             else{
                 ans.append(c);
