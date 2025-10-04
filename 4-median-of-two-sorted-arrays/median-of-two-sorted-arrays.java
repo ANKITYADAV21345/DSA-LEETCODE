@@ -2,11 +2,6 @@ import java.util.*;
 
 class Solution {
     public static double findMedianSortedArrays(int[] nums1, int[] nums2) {
-        //MAKE num1 as min length array
-        //call same function and change the params
-        //if nums1 was greater and nums2 was smaller 
-        //so because e swaped these two now nums1 is smaller and 
-        //nums2 is greater 
         // Ensure nums1 is the smaller array
         if (nums1.length > nums2.length) {
             return findMedianSortedArrays(nums2, nums1);
