@@ -1,1 +1,1 @@
-<h2>median-of-two-sorted-arrays Notes</h2><hr>[ Time taken: 20 hrs 39 m 12 s ]
+<h2>median-of-two-sorted-arrays Notes</h2><hr>[ Time taken: 18 hrs 29 m 28 s ]
