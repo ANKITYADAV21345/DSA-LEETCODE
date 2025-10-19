@@ -1,20 +1,20 @@
-import java.util.*;
-
+//codebix
 class Solution {
     public void sortColors(int[] nums) {
-        int n = nums.length;
-        int low = 0, mid = 0, high = n - 1;
+        int left = 0;       // Boundary for 0s (all elements before left are 0s)
+        int mid = 0;        // Current pointer being processed
+        int right = nums.length - 1; // Boundary for 2s (all elements after right are 2s)
 
-        while (mid <= high) {
+        while (mid <= right) { 
             if (nums[mid] == 0) {
-                swap(nums, low, mid);
+                swap(nums, left, mid);
+                left++;
                 mid++;
-                low++;
-            } else if (nums[mid] == 1) {
+            } else if (nums[mid] == 2) {
+                swap(nums, mid, right);
+                right--;
+            } else { // nums[mid] == 1
                 mid++;
-            } else { // nums[mid] == 2
-                swap(nums, high, mid);
-                high--;
             }
         }
     }
@@ -23,12 +23,5 @@ class Solution {
         int temp = nums[i];
         nums[i] = nums[j];
         nums[j] = temp;
-    }
-
-    public static void main(String[] args) {
-        Solution sol = new Solution();
-        int[] nums = {2, 0, 2, 1, 1, 0};
-        sol.sortColors(nums);
-        System.out.println(Arrays.toString(nums));
     }
 }
