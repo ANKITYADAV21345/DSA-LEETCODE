@@ -1,23 +1,18 @@
+//nikhil lohia thoda tha tweek kiya hai nikhil lohiya ka single no 1 ka code though chatgpt
 class Solution {
     public int singleNumber(int[] nums) {
-        int ans = 0;
-        
-        for (int i = 0; i < 32; i++) {
-            int sum = 0;
-            
-            for (int j = 0; j < nums.length; j++) {
-                if (((nums[j] >> i) & 1) == 1) {
-                    sum++;
-                }
-            }
-            
-            sum %= 3;
-            
-            if (sum != 0) {
-                ans |= (sum << i);
-            }
+
+        // variables to hold bits that appeared once and twice
+        int ones = 0, twos = 0;
+
+        // start the loop for all elements
+        for (int i = 0; i < nums.length; i++) {
+            // update ones and twos using bitwise operations
+            ones = (ones ^ nums[i]) & ~twos;
+            twos = (twos ^ nums[i]) & ~ones;
         }
 
-        return ans;
+        // return the single number that appears only once
+        return ones;
     }
 }
