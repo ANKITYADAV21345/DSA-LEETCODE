@@ -1,20 +1,13 @@
-#nikhil lohiya
-class Solution:
+class Solution(object):
     def twoSum(self, nums, target):
-        # Create hashmap (dictionary in Python)
-        num_map = {}
-
-        for i in range(len(nums)):
-            # Get the complement using the target value
-            complement = target - nums[i]
-
-            # Search the hashmap for complement, if found, we got our pair
-            if complement in num_map:
-                return [num_map[complement], i]
-
-            # Put the element in hashmap for subsequent searches
-            num_map[nums[i]] = i
-
-        return [0, 0]
-
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: List[int]
+        """
+        
+        for i in range(0,len(nums)):
+            for j in range(i+1,len(nums),1):
+                if target-nums[i]==nums[j]:
+                    return [i,j]
         
