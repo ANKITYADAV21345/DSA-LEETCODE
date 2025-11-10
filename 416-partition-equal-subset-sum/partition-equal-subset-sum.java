@@ -1,36 +1,41 @@
+//apna college dp notes minimum partitioning
 
-
-import java.util.*;
-
-public class Solution {
-    public boolean recursion(List<Integer> nums, int i, int sum, Map<String, Boolean> map) {
-        String key = i + "," + sum;
-
-        if (map.containsKey(key)) return map.get(key);
-        if (sum < 0) return false;
-        if (sum == 0) return true;
-        if (i == nums.size()) return false;
-
-        boolean result = recursion(nums, i + 1, sum - nums.get(i), map) || recursion(nums, i + 1, sum, map);
-        map.put(key, result);
-
-        return result;
-    }
-
-    public boolean canPartition(int[] numsArray) {
-        int sum = 0;
-        for (int num : numsArray) {
-            sum += num;
+class Solution {
+    public boolean canPartition(int[] nums) {
+        int n=nums.length;
+        int sum=0;
+        for(int i=0;i<nums.length;i++){
+            sum=sum+nums[i];
         }
 
-        if (sum % 2 != 0) return false;
+        int weight=sum/2;
+        int dp[][]=new int[n+1][weight+1];
 
-        List<Integer> nums = new ArrayList<>();
-        for (int num : numsArray) {
-            nums.add(num);
+        //initialization step
+        for(int i=0;i<n+1;i++){
+            for(int j=0;j<weight+1;j++){
+                dp[i][j]=0;
+            }
         }
 
-        Map<String, Boolean> map = new HashMap<>();
-        return recursion(nums, 0, sum / 2, map);
+
+        //botom up uproach
+        for(int i=1;i<n+1;i++){
+            for(int j=1;j<weight+1;j++){
+                if(nums[i-1]<=j){
+                    dp[i][j]=Math.max(nums[i-1]+dp[i-1][j-nums[i-1]],dp[i-1][j]);
+                }
+                else{
+                    dp[i][j]=dp[i-1][j];
+                }
+            }
+        }
+        int sum1=dp[n][weight];
+        int sum2=sum-sum1;
+        if((sum1-sum2)==0){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
