@@ -1,32 +1,25 @@
+//apna college notes
+
 class Solution {
     public int jump(int[] nums) {
-        
-    int totalJumps = 0;
+        int n=nums.length;
+        int dp[]=new int[n];
+        Arrays.fill(dp,-1);
+        dp[n-1]=0;
 
-    // destination is last index
-    int destination = nums.length - 1;
+        for(int i=n-2;i>=0;i--){
+            int steps=nums[i];
+            int ans=Integer.MAX_VALUE;
 
-    int coverage = 0, lastJumpIdx = 0;
-
-    // Base case
-    if (nums.length == 1) return 0;
-
-    // Greedy strategy: extend coverage as long as possible
-    for (int i = 0; i < nums.length; i++) {
-
-      coverage = Math.max(coverage, i + nums[i]);
-
-      if (i == lastJumpIdx) {
-        lastJumpIdx = coverage;
-        totalJumps++;
-
-        // check if we reached destination already
-        if (coverage >= destination) {
-          return totalJumps;
+            for(int j=i+1;j<=i+steps && j<n;j++){
+                if(dp[j]!=-1){
+                    ans=Math.min(ans,dp[j]+1);
+                }
+            }
+            if(ans!=Integer.MAX_VALUE){
+                dp[i]=ans;
+            }
         }
-      }
-    }
-
-    return totalJumps;
+        return dp[0];
     }
 }
