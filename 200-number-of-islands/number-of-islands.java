@@ -1,3 +1,4 @@
+//solved by own
 class Solution {
     public int numIslands(char[][] grid) {
         int count =0;
@@ -16,11 +17,11 @@ class Solution {
 
     public void solve(char [][] grid,int i,int j){
         //dead ends
-        if(i<0 || j<0 || i>=grid.length || j>=grid[i].length || grid[i][j]=='0' || grid[i][j]=='2'){
+        if(i<0 || j<0 || i>=grid.length || j>=grid[i].length || grid[i][j]=='0' || grid[i][j]=='3'){
             return;
         }
 
-        grid[i][j] = '2';
+        grid[i][j] = '3';
 
         solve(grid,i+1,j);
         solve(grid,i,j+1);
