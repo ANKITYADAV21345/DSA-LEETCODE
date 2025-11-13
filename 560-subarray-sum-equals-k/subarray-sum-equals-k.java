@@ -1,18 +1,18 @@
-//codebix
-public class Solution {
+//apna college notes 
+class Solution {
     public int subarraySum(int[] nums, int k) {
-        int sum = 0, result = 0;
-        Map<Integer, Integer> preSum = new HashMap<>();
-        preSum.put(0, 1);
-
-        for (int i = 0; i < nums.length; i++) {
-            sum += nums[i];
-            if (preSum.containsKey(sum - k)) {
-                result += preSum.get(sum - k);
+        HashMap <Integer,Integer> map=new HashMap<>();
+        //sum,count
+        map.put(0,1);
+        int sum=0;
+        int ans=0;
+        for(int j=0;j<nums.length;j++){
+            sum=sum+nums[j];
+            if(map.containsKey(sum-k)){
+                ans=ans+map.get(sum-k);
             }
-            preSum.put(sum, preSum.getOrDefault(sum, 0) + 1);
+            map.put(sum,map.getOrDefault(sum,0)+1);
         }
-
-        return result;
+        return ans;
     }
 }
