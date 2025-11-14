@@ -1,31 +1,44 @@
-//code shash
+// apna college notes ise ham priority queue implement karna sikhte hai
 class Solution {
+
+    static class Pair implements Comparable<Pair>{
+        int val;
+        int idx;
+
+        public Pair(int val,int idx){
+            this.val=val;
+            this.idx=idx;
+        }
+        
+        @Override
+        public int compareTo(Pair p2){
+            return p2.val-this.val;
+        }
+    }
+
+
     public int[] maxSlidingWindow(int[] nums, int k) {
-        int n = nums.length;
-        int res[] = new int[n - k + 1];
-        if (n == 0) {
-            return res;
+       int []res=new int[nums.length-k+1];
+
+       PriorityQueue<Pair> pq=new PriorityQueue<>();
+
+       //1st window
+       for(int i=0;i<k;i++){
+        pq.add(new Pair(nums[i],i));
+       }
+
+       res[0]=pq.peek().val;
+
+       for(int i=k;i<nums.length;i++){
+        while(pq.size()>0 && pq.peek().idx<=(i-k)){
+            pq.poll();
         }
-        Deque<Integer> deque = new ArrayDeque<Integer>();
-        int index = 0;
-        while (index < k) {
-            while (!deque.isEmpty() && nums[deque.peekLast()] <= nums[index]) {
-                deque.pollLast();
-            }
-            deque.offerLast(index);
-            index++;
+
+        pq.add(new Pair(nums[i],i));
+        res[i-k+1]=pq.peek().val;
         }
-        res[0] = nums[deque.peekFirst()];
-        for (int i = 1; i < n - k + 1; i++) {
-            if (!deque.isEmpty() && deque.peekFirst() <= (i - 1)) {
-                deque.pollFirst();
-            }
-            while (!deque.isEmpty() && nums[deque.peekLast()] <= nums[i + k - 1]) {
-                deque.pollLast();
-            }
-            deque.offerLast(i + k - 1);
-            res[i] = nums[deque.peekFirst()];
-        }
+
         return res;
+        
     }
 }
