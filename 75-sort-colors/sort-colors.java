@@ -1,27 +1,15 @@
-//codebix
+//ye khud se kiya
+import java.util.*;
+
 class Solution {
     public void sortColors(int[] nums) {
-        int left = 0;       // Boundary for 0s (all elements before left are 0s)
-        int mid = 0;        // Current pointer being processed
-        int right = nums.length - 1; // Boundary for 2s (all elements after right are 2s)
-
-        while (mid <= right) { 
-            if (nums[mid] == 0) {
-                swap(nums, left, mid);
-                left++;
-                mid++;
-            } else if (nums[mid] == 2) {
-                swap(nums, mid, right);
-                right--;
-            } else { // nums[mid] == 1
-                mid++;
-            }
+        int n = nums.length;
+        PriorityQueue<Integer> pq=new PriorityQueue<>();
+        for(int i=0;i<nums.length;i++){
+            pq.add(nums[i]);
         }
-    }
-
-    private void swap(int[] nums, int i, int j) {
-        int temp = nums[i];
-        nums[i] = nums[j];
-        nums[j] = temp;
+        for(int i=0;i<nums.length;i++){
+            nums[i]=pq.poll();
+        }
     }
 }
