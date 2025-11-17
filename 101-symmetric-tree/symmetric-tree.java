@@ -13,36 +13,51 @@
  *     }
  * }
  */
+
+
+
+// Root ke left aur right subtree ko mirror check karna hai.
+
+// Mirror ka matlab:
+
+// Left ka left == Right ka right
+
+// Left ka right == Right ka left
+
+
+// Agar values match nahi hui → false
+
+// Agar structure mismatch (null mismatch) → false
+
+// Agar sab match hua → true
+
+
+//done by self(recursion)
 class Solution {
-
-    
     public boolean isSymmetric(TreeNode root) {
-        if (root == null) return true;
+        
+        //base case
+        if(root==null){
+            return true;
+        }
 
-      Queue<TreeNode> leftTree = new LinkedList<>();
-      Queue<TreeNode> rightTree = new LinkedList<>();
+        return isMirror(root.left,root.right);
+    }
 
-      leftTree.add(root.left);
-      rightTree.add(root.right);
 
-      while (!leftTree.isEmpty() && !rightTree.isEmpty()) {
+    public boolean isMirror(TreeNode left,TreeNode right){
+        if(left==null && right==null){
+            return true;
+        }
 
-        TreeNode leftNode = leftTree.poll();
-        TreeNode rightNode = rightTree.poll();
+        if(left==null || right==null){
+            return false;
+        }
 
-        if (leftNode == null && rightNode == null) continue;
+        if(left.val!=right.val){
+            return false;
+        }
 
-        if (leftNode == null || rightNode == null) return false;
-
-        if (leftNode.val != rightNode.val) return false;
-
-        // Pushing order is very important
-        leftTree.add(leftNode.left);
-        leftTree.add(leftNode.right);
-        rightTree.add(rightNode.right);
-        rightTree.add(rightNode.left);
-      }
-
-      return true;
+        return isMirror(left.left,right.right)  && isMirror(left.right,right.left);
     }
 }
