@@ -15,40 +15,34 @@
  */
 
 
- //codebix
-import java.util.*;
-
-class Solution {
+//apna college notes
+ class Solution {
     public List<List<Integer>> levelOrder(TreeNode root) {
-        List<List<Integer>> output = new ArrayList<>();
-        
-        if (root == null) {
-            return output;
-        }
+        List<List<Integer>> outerList = new ArrayList<>();
+        if (root == null) return outerList;
 
-        Queue<TreeNode> queue = new LinkedList<>();
-        queue.add(root);
+        Queue<TreeNode> q = new LinkedList<>();
+        q.add(root);
+        q.add(null);
 
-        while (!queue.isEmpty()) {
-            List<Integer> list1 = new ArrayList<>();
-            int size = queue.size();
+        List<Integer> innerList = new ArrayList<>();
 
-            for (int i = 0; i < size; i++) {
-                TreeNode node = queue.poll();
-                list1.add(node.val);
+        while (!q.isEmpty()) {
+            TreeNode currNode = q.remove();
 
-                if (node.left != null) {
-                    queue.add(node.left);
-                }
+            if (currNode == null) {
+                outerList.add(innerList);
+                if (q.isEmpty()) break;
+                innerList = new ArrayList<>();
+                q.add(null);
+            } else {
+                innerList.add(currNode.val);
 
-                if (node.right != null) {
-                    queue.add(node.right);
-                }
+                if (currNode.left != null) q.add(currNode.left);
+                if (currNode.right != null) q.add(currNode.right);
             }
-
-            output.add(list1);
         }
 
-        return output;
+        return outerList;
     }
 }
