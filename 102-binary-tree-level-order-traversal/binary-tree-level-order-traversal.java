@@ -15,34 +15,34 @@
  */
 
 
-//apna college notes
- class Solution {
+
+
+
+
+//done by my self (recursion)
+class Solution {
     public List<List<Integer>> levelOrder(TreeNode root) {
-        List<List<Integer>> outerList = new ArrayList<>();
-        if (root == null) return outerList;
+        List<List<Integer>> result = new ArrayList<>();
+        levelorder(root, 0, result);
 
-        Queue<TreeNode> q = new LinkedList<>();
-        q.add(root);
-        q.add(null);
+        return result;
+    }
 
-        List<Integer> innerList = new ArrayList<>();
+    public void levelorder(TreeNode node, int level, List<List<Integer>> result) {
+        if (node == null) return;
 
-        while (!q.isEmpty()) {
-            TreeNode currNode = q.remove();
-
-            if (currNode == null) {
-                outerList.add(innerList);
-                if (q.isEmpty()) break;
-                innerList = new ArrayList<>();
-                q.add(null);
-            } else {
-                innerList.add(currNode.val);
-
-                if (currNode.left != null) q.add(currNode.left);
-                if (currNode.right != null) q.add(currNode.right);
-            }
+        // If this level doesn't exist yet, create it
+        if (result.size() == level) {
+            result.add(new ArrayList<>());
         }
 
-        return outerList;
+        // Add value to current level
+        result.get(level).add(node.val);
+
+        // Recur for children
+        levelorder(node.left, level + 1, result);
+        levelorder(node.right, level + 1, result);
     }
 }
+   
+   
