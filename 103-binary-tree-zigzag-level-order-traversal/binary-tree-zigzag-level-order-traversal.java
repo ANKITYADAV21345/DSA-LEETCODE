@@ -13,41 +13,36 @@
  *     }
  * }
  */
+
+
+
+
+ //done by my self(recursion)
 class Solution {
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
-         List<List<Integer>> zigzag = new ArrayList<>();
-    if (root == null) return zigzag;
-
-    Queue<TreeNode> queue = new LinkedList<>();
-    queue.add(root);
-    boolean flag = false;
-
-    while (!queue.isEmpty()) {
-
-      int size = queue.size();
-      List<Integer> level = new ArrayList<>();
-      Stack<Integer> reverseStack = new Stack<>();
-      for (int i = 0; i < size; i++) {
-        TreeNode node = queue.poll();
-
-        // Check flag
-        if (flag)
-          reverseStack.add(node.val);
-        else
-          level.add(node.val);
-
-        if (node.left != null) queue.add(node.left);
-        if (node.right != null) queue.add(node.right);
-      }
-      flag = !flag;
-
-      // Pop all elements from stack
-      while (!reverseStack.isEmpty())
-        level.add(reverseStack.pop());
-
-      zigzag.add(level);
+        List<List<Integer>> result=new ArrayList<>();
+        zigzagprint(root,0,result);
+        return result;
     }
 
-    return zigzag;
+    public void zigzagprint(TreeNode root,int level,List<List<Integer>> result){
+
+        if(root==null){
+            return;
+        }
+
+        if(result.size()==level){
+            result.add(new ArrayList<>());
+        }
+
+        if(level%2 ==0){
+            result.get(level).add(root.val);
+        }
+        else{
+            result.get(level).add(0,root.val);  //ye mast logical line hai ise dubara revise karna
+        }
+        zigzagprint(root.left,level+1,result);
+        zigzagprint(root.right,level+1,result);
+        
     }
 }
