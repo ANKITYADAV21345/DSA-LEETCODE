@@ -1,21 +1,42 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
 
-import java.util.Stack;
 
+
+//done by my own (recursion)
 class Solution {
-    private int res;
-    
+    int count = 0;
+    int ans = -1;
+
     public int kthSmallest(TreeNode root, int k) {
-        Stack<TreeNode> stack = new Stack<>();
-        
-        while (true) {
-            while (root != null) {
-                stack.push(root);
-                root = root.left;
-            }
-            
-            root = stack.pop();
-            if (--k == 0) return root.val;
-            root = root.right;
+        inorder(root, k);
+        return ans;
+    }
+
+    private void inorder(TreeNode root, int k) {
+        if (root == null) return;
+
+        inorder(root.left, k);
+
+        count++;
+        if (count == k) {
+            ans = root.val;
+            return;
         }
+
+        inorder(root.right, k);
     }
 }
