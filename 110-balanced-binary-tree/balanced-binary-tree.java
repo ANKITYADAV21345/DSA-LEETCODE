@@ -15,32 +15,20 @@
  */
 
 
-
- //code shash
+ import java.util.*;
 class Solution {
     public boolean isBalanced(TreeNode root) {
-        return getHeight(root) != -1;
+        if(root == null) return true;
+            int x = height(root.left);
+            int y = height(root.right);
+         if(Math.abs(x-y)>1){
+                return false;
+         }
+         return isBalanced(root.left) && isBalanced(root.right);
     }
 
-    public int getHeight(TreeNode root) {
-        if (root == null) {
-            return 0;
-        }
-
-        int leftSubTreeHeight = getHeight(root.left);
-        int rightSubTreeHeight = getHeight(root.right);
-
-        // If either subtree is unbalanced, propagate the failure
-        if (leftSubTreeHeight == -1 || rightSubTreeHeight == -1) {
-            return -1;
-        }
-
-        // If the difference in heights is more than 1, it's unbalanced
-        if (Math.abs(leftSubTreeHeight - rightSubTreeHeight) > 1) {
-            return -1;
-        }
-
-        // Return the height of the tree
-        return 1 + Math.max(leftSubTreeHeight, rightSubTreeHeight);
+    public int height(TreeNode root){
+        if(root == null) return 0;
+        return 1+ Math.max(height(root.left),height(root.right));
     }
 }
