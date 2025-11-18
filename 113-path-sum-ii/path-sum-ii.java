@@ -13,49 +13,40 @@
  *     }
  * }
  */
-//changes made from chatgpt from path sum 1 to path sum 2
-public class Solution {
 
-  public List<List<Integer>> pathSum(TreeNode root, int sum) {
-    List<List<Integer>> result = new ArrayList<>();
 
-    if (root == null)
-      return result;
 
-    Stack<TreeNode> path = new Stack<>();
-    Stack<Integer> sumPath = new Stack<>();
-    Stack<List<Integer>> paths = new Stack<>();
 
-    path.push(root);
-    sumPath.push(root.val);
-    paths.push(new ArrayList<>(Arrays.asList(root.val)));
+//done by my own(recursion +backtracking)
+class Solution {
+    public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
+        List<List<Integer>> outerList = new ArrayList<>();
+        List<Integer> innerList = new ArrayList<>();
 
-    while (!path.isEmpty()) {
-      TreeNode temp = path.pop();
-      int tempVal = sumPath.pop();
-      List<Integer> currentPath = paths.pop();
+        sumList(root, targetSum, innerList, outerList);
 
-      if (temp.left == null && temp.right == null && tempVal == sum) {
-        result.add(new ArrayList<>(currentPath));
-      }
-
-      if (temp.right != null) {
-        path.push(temp.right);
-        sumPath.push(temp.right.val + tempVal);
-        List<Integer> newPath = new ArrayList<>(currentPath);
-        newPath.add(temp.right.val);
-        paths.push(newPath);
-      }
-
-      if (temp.left != null) {
-        path.push(temp.left);
-        sumPath.push(temp.left.val + tempVal);
-        List<Integer> newPath = new ArrayList<>(currentPath);
-        newPath.add(temp.left.val);
-        paths.push(newPath);
-      }
+        return outerList;
     }
 
-    return result;
-  }
+    private void sumList(TreeNode root, int targetSum, 
+                        List<Integer> path, 
+                        List<List<Integer>> result) {
+
+        if (root == null) return;
+
+        // add current node
+        path.add(root.val);
+
+        // leaf node check
+        if (root.left == null && root.right == null && root.val == targetSum) {
+            result.add(new ArrayList<>(path));  // copy list
+        }
+
+        // explore left and right
+        sumList(root.left, targetSum - root.val, path, result);
+        sumList(root.right, targetSum - root.val, path, result);
+
+        // backtrack
+        path.remove(path.size() - 1);
+    }
 }
