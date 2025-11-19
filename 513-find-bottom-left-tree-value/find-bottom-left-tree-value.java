@@ -14,24 +14,28 @@
  * }
  */
 
- //coding sphere 
 class Solution {
     public int findBottomLeftValue(TreeNode root) {
-        Queue<TreeNode> queue = new ArrayDeque<>();
+        Queue<TreeNode> queue=new ArrayDeque<>();
         queue.add(root);
 
-        int left_most = 0;
+        int left_most=0;
 
-        while (!queue.isEmpty()) {
-            int size = queue.size();
-            left_most = queue.peek().val;  // First node in the current level
+        while(queue.size()>0)
+        {
+            left_most=queue.peek().val;
+            int size=queue.size();
+            for(int i=1;i<=size;i++)
+            {
+                TreeNode tmp=queue.poll();
+                if(tmp.left!=null) queue.add(tmp.left);
+                if(tmp.right!=null) queue.add(tmp.right);
 
-            for (int i = 0; i < size; i++) {
-                TreeNode tmp = queue.poll();
-                if (tmp.left != null) queue.add(tmp.left);
-                if (tmp.right != null) queue.add(tmp.right);
             }
+
         }
         return left_most;
+
+        }
+        
     }
-}
