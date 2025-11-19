@@ -16,25 +16,24 @@
 
 
 
- //codebix
+ //done by own(recursion)
 class Solution {
-    int leftLeafSum = 0;
     public int sumOfLeftLeaves(TreeNode root) {
-        helper(root);
-        return leftLeafSum;
-    }
-    private void helper(TreeNode root){
-        if(root ==null) return;
-        if(isLeafNode(root.left)) leftLeafSum += root.left.val;
-        helper(root.left);
-        helper(root.right);
-    }
-    
-    private boolean isLeafNode(TreeNode root){
-        if(root == null) return false;
-        if(root.left == null && root.right == null)
-            return true;
         
-        return false;
+        //base case 
+        if(root==null){
+            return 0;
+        }
+
+        int sum=0;
+
+        if(root.left!=null && root.left.left==null &&root.left.right==null){
+            sum=sum+root.left.val;
+        }
+
+        sum=sum+sumOfLeftLeaves(root.left);
+        sum=sum+sumOfLeftLeaves(root.right);
+
+        return sum;
     }
 }
