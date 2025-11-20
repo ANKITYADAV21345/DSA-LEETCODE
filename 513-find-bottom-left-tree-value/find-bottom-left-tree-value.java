@@ -14,28 +14,24 @@
  * }
  */
 
+
+//Sachin bhai ka code (level order ka structure mast laga maam vale se )
 class Solution {
     public int findBottomLeftValue(TreeNode root) {
-        Queue<TreeNode> queue=new ArrayDeque<>();
-        queue.add(root);
-
-        int left_most=0;
-
-        while(queue.size()>0)
-        {
-            left_most=queue.peek().val;
-            int size=queue.size();
-            for(int i=1;i<=size;i++)
-            {
-                TreeNode tmp=queue.poll();
-                if(tmp.left!=null) queue.add(tmp.left);
-                if(tmp.right!=null) queue.add(tmp.right);
-
+        List<List<Integer>> ans=new ArrayList<>();
+        Queue<TreeNode> q=new LinkedList<>();
+        q.add(root);
+        while(!q.isEmpty()){
+            List<Integer> l=new ArrayList<>();
+            int size=q.size();
+            for(int i=0;i<size;i++){
+                TreeNode node=q.poll();
+                l.add(node.val);
+                if(node.left!=null) q.add(node.left);
+                if(node.right!=null) q.add(node.right);
             }
-
+            ans.add(l);
         }
-        return left_most;
-
-        }
-        
+        return ans.get(ans.size()-1).get(0);
     }
+}
