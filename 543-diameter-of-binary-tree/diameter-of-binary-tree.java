@@ -13,37 +13,39 @@
  *     }
  * }
  */
+
+
+
+//apna college notes(recursion)
 class Solution {
-    public int diameterOfBinaryTree(TreeNode root) {
-    Map<TreeNode, Integer> map = new HashMap<>();
-    Stack<TreeNode> stack = new Stack<>();
-    int diameter = 0;
 
-    if (root != null)
-      stack.push(root);
 
-    while (!stack.isEmpty()) {
-      TreeNode node = stack.peek();
+    public int height(TreeNode root){
+        if(root==null){
+            return 0;
+        }
 
-      // Fill up stack to perform post-order traversal
-      if (node.left != null && !map.containsKey(node.left)) {
-        stack.push(node.left);
-      } else if (node.right != null && !map.containsKey(node.right)) {
-        stack.push(node.right);
-      } else {
+        int leftHeight=height(root.left);
+        int rightHeight=height(root.right);
 
-        // Process the root, once left and right sub-tree have been processed
-        stack.pop();
-        int leftDepth = map.getOrDefault(node.left, 0);
-        int rightDepth = map.getOrDefault(node.right, 0);
-
-        // Put the max depth at a node in the map
-        map.put(node, 1 + Math.max(leftDepth, rightDepth));
-
-        // Update the max diameter found so far
-        diameter = Math.max(diameter, leftDepth + rightDepth);
-      }
+        return Math.max(leftHeight,rightHeight)+1;
     }
-    return diameter;
+
+
+
+    public int diameterOfBinaryTree(TreeNode root) {
+        if(root==null){
+            return 0;
+        }
+
+        int leftDiameter=diameterOfBinaryTree(root.left);
+        int leftHeight=height(root.left);
+
+        int rightDiameter=diameterOfBinaryTree(root.right);
+        int rightHeight=height(root.right);
+
+        int selfDiameter=leftHeight+rightHeight;   //iss question me max leangth eadge batani thi issliye +1 NAHI KIYA AND MAAM NE JO KARAYA THA VO MAX NODES IN LONGEST diamenter tha 
+
+        return Math.max(selfDiameter,Math.max(leftDiameter,rightDiameter));
     }
 }
