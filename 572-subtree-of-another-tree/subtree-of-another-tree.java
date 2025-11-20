@@ -15,25 +15,32 @@
  */
 
 
- //nikhil lohia
+
+
+//apna college notes (recursion)
 class Solution {
-    // Serialize the tree using preorder traversal with null markers
-    private String preOrderTraversal(TreeNode node) {
-        if (node == null) {
-            return "null";
-        }
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("#").append(node.val).append(" "); // Use # to separate nodes safely
-        sb.append(preOrderTraversal(node.left)).append(" ");
-        sb.append(preOrderTraversal(node.right));
+    // check if two trees are identical
+    public boolean isIdentical(TreeNode root, TreeNode subRoot) {
+        if (root == null && subRoot == null) return true;
+        if (root == null || subRoot == null) return false;
+        if (root.val != subRoot.val) return false;
 
-        return sb.toString();
+        // recursively check left and right
+        return isIdentical(root.left, subRoot.left) && isIdentical(root.right, subRoot.right);
     }
 
+    // LeetCode expects method name isSubtree (lowercase t)
     public boolean isSubtree(TreeNode root, TreeNode subRoot) {
-        String fullTree = preOrderTraversal(root);
-        String subTree = preOrderTraversal(subRoot);
-        return fullTree.contains(subTree);
+        // if subRoot is null, it's a subtree of any tree
+        if (subRoot == null) return true;
+        // if main tree is null but subRoot isn't, can't be a subtree
+        if (root == null) return false;
+
+        // if current node matches the root of subRoot, check identical
+        if (root.val == subRoot.val && isIdentical(root, subRoot)) return true;
+
+        // otherwise search left or right subtrees
+        return isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
     }
 }
