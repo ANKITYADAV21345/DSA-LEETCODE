@@ -1,18 +1,34 @@
+//done by own(recursion+tabulation)
 class Solution {
+    int[] memo;
+
     public int maxSubArray(int[] nums) {
-        int maxsum = Integer.MIN_VALUE;
-        int currentsum = 0;
+        int n=nums.length;
+        memo=new int[n];
 
-        for (int i = 0; i < nums.length; i++) {
-            currentsum = currentsum + nums[i];  
-            maxsum = Math.max(currentsum, maxsum);
-
-            if (currentsum < 0) {
-                currentsum = 0;
-            }
-            
+        //initialize memo with special value
+        for(int i=0;i<n;i++){
+            memo[i]=Integer.MIN_VALUE;
         }
 
-        return maxsum;
+        int ans=nums[0];
+        for(int i=0;i<n;i++){
+            ans=Math.max(ans,solve(nums,i));
+        }
+        return ans;
+    }
+
+    public int solve(int [] nums,int i){
+        //base case 
+        if(i==0) return nums[0];
+
+        if(memo[i]!=Integer.MIN_VALUE){
+            return memo[i];
+        }
+
+        //logic
+        int startNew=nums[i];
+        int continuePrev=nums[i]+Math.max(0,solve(nums,i-1));
+        return memo[i]=Math.max(startNew,continuePrev);
     }
 }
