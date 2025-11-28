@@ -1,37 +1,29 @@
-//apna college
+//done by my own 2 pointer 
 class Solution {
     public int trap(int[] height) {
-        //calculate left max boundary in the form of arrey(auxaliary arrey/helper arreys)
-        //calculate right max boundary in the form of arrey(auxalary arreys/helper areys)
-        //fir loop run karna hai jiko use karke water level nikalna hai 
-        //waterlevel=min(left max boundary,right max boundary);
-        //trapped water=water level-height[i]
+        int n = height.length;
+        int left = 0, right = n - 1;
+        int leftMax = 0, rightMax = 0;
+        int res = 0;
 
-        //calculate left max boundary in the form of arrey(auxaliary arrey/helper arreys)
-        int leftmax[] = new int[height.length];
-        leftmax[0] = height[0];
-        for (int i = 1; i < height.length; i++) {
-            leftmax[i] = Math.max(height[i], leftmax[i - 1]);
+        while (left < right) {
+            if (height[left] < height[right]) {
+                if (height[left] >= leftMax) {
+                    leftMax = height[left];
+                } else {
+                    res += leftMax - height[left];
+                }
+                left++;
+            } else {
+                if (height[right] >= rightMax) {
+                    rightMax = height[right];
+                } else {
+                    res += rightMax - height[right];
+                }
+                right--;
+            }
         }
 
-        //calculate right max boundary in the form of arrey(auxalary arreys/helper areys)
-        int rightmax[] = new int[height.length];
-        rightmax[height.length - 1] = height[height.length - 1];
-        for (int i = height.length - 2; i >= 0; i--) {
-            rightmax[i] = Math.max(height[i], rightmax[i + 1]);
-        }
-
-        //fir loop run karna hai jiko use karke water level nikalna hai
-        int trappedwater = 0;
-        for (int i = 0; i < height.length; i++) {
-            //waterlevel=min(left max boundary,right max boundary)
-            int waterlevel = Math.min(rightmax[i], leftmax[i]);
-            //trapped water=water level-height[i]
-            trappedwater = trappedwater + waterlevel - height[i];
-        }
-
-        return trappedwater;
+        return res;
     }
-
-    
 }
