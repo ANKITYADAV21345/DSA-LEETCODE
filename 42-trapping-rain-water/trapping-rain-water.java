@@ -1,29 +1,27 @@
-//done by my own 2 pointer 
+//stack solution
 class Solution {
     public int trap(int[] height) {
         int n = height.length;
-        int left = 0, right = n - 1;
-        int leftMax = 0, rightMax = 0;
-        int res = 0;
+        int trapped = 0;
+        Stack<Integer> st = new Stack<>();
 
-        while (left < right) {
-            if (height[left] < height[right]) {
-                if (height[left] >= leftMax) {
-                    leftMax = height[left];
-                } else {
-                    res += leftMax - height[left];
-                }
-                left++;
-            } else {
-                if (height[right] >= rightMax) {
-                    rightMax = height[right];
-                } else {
-                    res += rightMax - height[right];
-                }
-                right--;
+        for (int i = 0; i < n; i++) {
+            // Jab higher bar mile
+            while (!st.isEmpty() && height[i] > height[st.peek()]) {
+                int bottom = st.pop(); // bowl ka bottom
+                
+                if (st.isEmpty()) break;
+
+                int left = st.peek(); // left boundary
+                int width = i - left - 1;
+                int heightWater = Math.min(height[left], height[i]) - height[bottom];
+                
+                trapped += width * heightWater;
             }
-        }
 
-        return res;
+            st.push(i);
+        }
+        
+        return trapped;
     }
 }
