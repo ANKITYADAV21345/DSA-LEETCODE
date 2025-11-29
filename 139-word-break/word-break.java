@@ -1,31 +1,29 @@
-//nikhil lohia
+
+//recursive +memoised 
 class Solution {
     public boolean wordBreak(String s, List<String> wordDict) {
-        // Convert the dictionary to a set for O(1) lookups
-        Set<String> wordSet = new HashSet<>(wordDict);
+        Set<String> set = new HashSet<>(wordDict);
+        Boolean[] memo = new Boolean[s.length()];
+        return solve(s, 0, set, memo);
+    }
 
-        // Find the maximum word length in the dictionary
-        int maxLen = 0;
-        for (String word : wordDict) {
-            maxLen = Math.max(maxLen, word.length());
+    private boolean solve(String s, int start, Set<String> set, Boolean[] memo) {
+        // if we reached the end => successful segmentation
+        if (start == s.length()) {
+            return true;
         }
 
-        int n = s.length();
-        // dp[i] states if the substring s[0..i] can be segmented
-        boolean[] dp = new boolean[n + 1];
+        if (memo[start] != null) {
+            return memo[start];
+        }
 
-        // Base case: empty string is valid
-        dp[0] = true;
+        for (int end = start + 1; end <= s.length(); end++) {
+            String part = s.substring(start, end);
+            if (set.contains(part) && solve(s, end, set, memo)) {
+                return memo[start] = true;
+            }
+        }
 
-        for (int i = 1; i <= n; i++)
-
-            // Check prefixes of length up to maxLen
-            for (int j = i - 1; j >= Math.max(0, i - maxLen); j--)
-                if (dp[j] && wordSet.contains(s.substring(j, i))) {
-                    dp[i] = true;
-                    break; // No need to check further prefixes
-                }
-
-        return dp[n];
+        return memo[start] = false;
     }
 }
