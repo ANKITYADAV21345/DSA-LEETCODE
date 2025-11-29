@@ -1,24 +1,40 @@
-//codebix
+// solve(i, j) → number of ways t[i..] can be formed from s[j..]
+
+//recursion+memoisation
 class Solution {
+
+    int[][] memo;
+
     public int numDistinct(String s, String t) {
-        int[][] dp = new int[t.length() + 1][s.length() + 1];
+        memo = new int[t.length()][s.length()];
+        for (int[] row : memo) {
+            Arrays.fill(row, -1);
+        }
+        return solve(s, t, 0, 0);
+    }
 
-        // Base case: an empty t is a subsequence of any prefix of s
-        for (int j = 0; j <= s.length(); j++) {
-            dp[0][j] = 1;
+    private int solve(String s, String t, int i, int j) {
+        // If t is fully matched
+        if (i == t.length()) return 1;
+
+        // If s is exhausted but t remains
+        if (j == s.length()) return 0;
+
+        // Check memo
+        if (memo[i][j] != -1) return memo[i][j];
+
+        int ways = 0;
+
+        // Characters match → take OR skip
+        if (t.charAt(i) == s.charAt(j)) {
+            ways += solve(s, t, i + 1, j + 1);
         }
 
-        // Fill dp table
-        for (int i = 0; i < t.length(); i++) {
-            for (int j = 0; j < s.length(); j++) {
-                if (t.charAt(i) == s.charAt(j)) {
-                    dp[i + 1][j + 1] = dp[i][j] + dp[i + 1][j];
-                } else {
-                    dp[i + 1][j + 1] = dp[i + 1][j];
-                }
-            }
-        }
+        // Skip s[j]
+        ways += solve(s, t, i, j + 1);
 
-        return dp[t.length()][s.length()];
+        return memo[i][j] = ways;
     }
 }
+
+
