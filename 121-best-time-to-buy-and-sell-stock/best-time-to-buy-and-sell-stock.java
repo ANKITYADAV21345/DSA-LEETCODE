@@ -1,25 +1,20 @@
-//nikhil lohia
+// dp[i] = max profit possible till day i
+
+//tabular
 class Solution {
     public int maxProfit(int[] prices) {
-        // at the beginning the minimum price is the first price
-    int buy_price = prices[0];
+        int n = prices.length;
+        int[] dp = new int[n];
 
-    // at the beginning the minimum  profit is zero
-    int profit = 0;
+        int minPrice = prices[0];
+        dp[0] = 0; // No profit on first day
 
-    for (int i = 1; i < prices.length; i++) {
+        for (int i = 1; i < n; i++) {
+            minPrice = Math.min(minPrice, prices[i]); 
+            dp[i] = Math.max(dp[i - 1], prices[i] - minPrice);
+        }
 
-      // if the current price is less update the buy_price
-      if (prices[i] < buy_price) {
-        buy_price = prices[i];
-      }
-      else {
-        // else check if we can get a better profit
-        int current_profit = prices[i] - buy_price;
-        profit = Math.max(current_profit, profit);
-      }
-    }
-
-    return profit;
+        return dp[n - 1];
     }
 }
+
