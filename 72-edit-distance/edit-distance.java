@@ -1,37 +1,41 @@
-//apna college notes
+// solve(i, j) → minimum operations to convert
+//              word1[0..i] → word2[0..j]
+
+//recursion+tabular
 class Solution {
+    int[][] memo;
+
     public int minDistance(String word1, String word2) {
-        int n=word1.length();
-        int m=word2.length();
-        int dp[][]=new int [n+1][m+1];
+        int n = word1.length();
+        int m = word2.length();
 
-        //initialize
-        for(int i=0;i<n+1;i++){
-            for(int j=0;j<m+1;j++){
-                if(i==0){
-                    dp[i][j]=j;
-                }
-                if(j==0){
-                    dp[i][j]=i;
-                }
-            }
+        memo = new int[n][m];
+        for (int[] row : memo) {
+            Arrays.fill(row, -1);
         }
 
+        return solve(word1, word2, n - 1, m - 1);
+    }
 
-        //botom up 
-        for(int i=1;i<n+1;i++){
-            for(int j=1;j<m+1;j++){
-                if(word1.charAt(i-1)==word2.charAt(j-1)){
-                    dp[i][j]=dp[i-1][j-1];
-                }
-                else{
-                    int add=dp[i][j-1]+1;
-                    int del=dp[i-1][j]+1;
-                    int rep=dp[i-1][j-1]+1;
-                    dp[i][j]=Math.min(add,Math.min(del,rep));
-                }
-            }
+    private int solve(String w1, String w2, int i, int j) {
+        // Base cases
+        if (i < 0) return j + 1;
+        if (j < 0) return i + 1;
+
+        // Memo check
+        if (memo[i][j] != -1) return memo[i][j];
+
+        // Characters match → no new operation
+        if (w1.charAt(i) == w2.charAt(j)) {
+            return memo[i][j] = solve(w1, w2, i - 1, j - 1);
         }
-        return dp[n][m];
+
+        // Mismatch → try all 3 operations
+        int insert = solve(w1, w2, i, j - 1) + 1;
+        int del = solve(w1, w2, i - 1, j) + 1;
+        int replace = solve(w1, w2, i - 1, j - 1) + 1;
+
+        return memo[i][j] = Math.min(insert, Math.min(del, replace));
     }
 }
+
