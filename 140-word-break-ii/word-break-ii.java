@@ -1,31 +1,28 @@
-//codebix
+//tabulationn 
 class Solution {
-   public List<String> wordBreak(String s, List<String> wordDict) {  
-       HashMap<Integer, List<String>> hm = new HashMap<>(); 
-       HashSet<String> hs = new HashSet<>(wordDict);
-       return wordBreakHelper(s, 0, hs, hm);
-}
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        int n = s.length();
+        Set<String> dict = new HashSet<>(wordDict);
 
-private List<String> wordBreakHelper(String s, int start, HashSet<String> dict, HashMap<Integer, List<String>> hm ) {
+        // dp[i] stores all valid sentences from index i
+        List<String>[] dp = new ArrayList[n + 1];
 
-    if (hm.containsKey(start))
-        return hm.get(start); 
+        for (int i = 0; i <= n; i++)
+            dp[i] = new ArrayList<>();
 
-    List<String> validSubstr = new ArrayList<>();
+        dp[n].add(""); // empty string is a valid suffix
 
-    if (start == s.length())
-        validSubstr.add("");
-
-    for (int end = start + 1; end <= s.length(); end++) {
-        String prefix = s.substring(start, end);
-        if (dict.contains(prefix)) {
-            List<String> suffixes = wordBreakHelper(s, end, dict, hm);
-            for (String suffix : suffixes)
-               validSubstr.add(prefix + (suffix.equals("") ? "" : " ") + suffix); 
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = i + 1; j <= n; j++) {
+                String prefix = s.substring(i, j);
+                if (dict.contains(prefix)) {
+                    for (String sentence : dp[j]) {
+                        dp[i].add(sentence.isEmpty() ? prefix : prefix + " " + sentence);
+                    }
+                }
+            }
         }
+
+        return dp[0];
     }
- 
-    hm.put(start, validSubstr);
-    return validSubstr;
- }
 }
