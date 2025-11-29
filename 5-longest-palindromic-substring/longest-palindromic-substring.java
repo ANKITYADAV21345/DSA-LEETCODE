@@ -1,35 +1,38 @@
 class Solution {
+
+    String [][] memo;
+    public String expand(String s,int left ,int right){
+        if(left>=0 && right<s.length() && memo[left][right]!=null){
+            return memo[left][right];
+        }
+
+        //base case 
+        if(left<0 || right>=s.length()|| s.charAt(left)!=s.charAt(right)){
+            return s.substring(left+1,right);
+        }
+
+        String ans=expand(s,left-1,right+1);
+
+        if(left>=0 && right<s.length()){
+            memo[left][right]=ans;
+        }
+        return ans;
+    }
+
     public String longestPalindrome(String s) {
-        if(s.length()<=1)
-            return s;
+        memo=new String[s.length()][s.length()];
+        String longest="";
 
-        String LPS="";
-        for(int i=1;i<s.length();i++){
-            int low=i;
-            int high=i;
-            while(low>=0 && high<s.length() && s.charAt(low)==s.charAt(high)){
-                low--;
-                high++;
+        for(int i=0;i<s.length();i++){
+            String odd=expand(s,i,i);
+            String even=expand(s,i,i+1);
+            if(odd.length()>longest.length()){
+                longest=odd;
             }
-
-            String palindrome=s.substring(low+1,high);
-            if(palindrome.length()>LPS.length()){
-                LPS=palindrome;
-            }
-
-            low=i-1;
-            high=i;
-            while(low>=0 && high<s.length() && s.charAt(low)==s.charAt(high)){
-                low--;
-                high++;
-            }
-
-            palindrome=s.substring(low+1,high);
-            if(palindrome.length()>LPS.length()){
-                LPS=palindrome;
+            if(even.length()>longest.length()){
+                longest=even;
             }
         }
-        return LPS;
-        
+        return longest;
     }
 }
