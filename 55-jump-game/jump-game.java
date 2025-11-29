@@ -1,23 +1,30 @@
-//tabular
+//recursion+memoised
 class Solution {
+    Boolean[] memo;
+
     public boolean canJump(int[] nums) {
+        memo = new Boolean[nums.length];
+        return solve(nums, 0);
+    }
+
+    private boolean solve(int[] nums, int i) {
         int n = nums.length;
-        boolean dp[] = new boolean[n];
+
+        // base case: reach last index
+        if (i == n - 1) return true;
+
+        // memo check
+        if (memo[i] != null) return memo[i];
+
+        int maxJump = nums[i];
         
-        dp[n - 1] = true; // base case
-        
-        for (int i = n - 2; i >= 0; i--) {
-            int steps = nums[i];
-            dp[i] = false;
-            
-            for (int j = i + 1; j <= i + steps && j < n; j++) {
-                if (dp[j]) {
-                    dp[i] = true;
-                    break;
-                }
+        // try all possible jumps
+        for (int j = i + 1; j <= i + maxJump && j < n; j++) {
+            if (solve(nums, j)) {
+                return memo[i] = true;
             }
         }
-        
-        return dp[0];
+
+        return memo[i] = false;
     }
 }
