@@ -1,26 +1,34 @@
-//nikhil lohia
 class Solution {
     public int maxProduct(int[] nums) {
         int n = nums.length;
-        long leftProduct = 1;
-        long rightProduct = 1;
-        long ans = nums[0];
 
-        for (int i = 0; i < n; i++) {
+        // dpMax[i] = maximum product of subarray ending at index i
+        // dpMin[i] = minimum product of subarray ending at index i
+        //
+        // Negative number multiply hote hi role swap ho sakta hai:
+        // min → max, max → min
 
-            //if any of leftProduct or rightProduct become 0 then update it to 1
-            leftProduct = (leftProduct == 0 || leftProduct < Integer.MIN_VALUE) ? 1 : leftProduct;
-            rightProduct = (rightProduct == 0 || rightProduct < Integer.MIN_VALUE) ? 1 : rightProduct;
+        int[] dpMax = new int[n];
+        int[] dpMin = new int[n];
 
-            //prefix product
-            leftProduct *= nums[i];
+        dpMax[0] = nums[0];
+        dpMin[0] = nums[0];
 
-            //suffix product
-            rightProduct *= nums[n - 1 - i];
+        int ans = nums[0];
 
-            ans = Math.max(ans, Math.max(leftProduct, rightProduct));
+        for (int i = 1; i < n; i++) {
+            int curr = nums[i];
+
+            // Three possibilities:
+            // 1️⃣ Current number alone
+            // 2️⃣ Current × previous max product
+            // 3️⃣ Current × previous min product
+            dpMax[i] = Math.max(curr, Math.max(curr * dpMax[i - 1], curr * dpMin[i - 1]));
+            dpMin[i] = Math.min(curr, Math.min(curr * dpMax[i - 1], curr * dpMin[i - 1]));
+
+            ans = Math.max(ans, dpMax[i]);
         }
 
-        return (int) ans;
+        return ans;
     }
 }
