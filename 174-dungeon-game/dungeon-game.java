@@ -1,25 +1,35 @@
-//codebix
+//tabulation
 class Solution {
     public int calculateMinimumHP(int[][] dungeon) {
-        if (dungeon == null || dungeon.length == 0 || dungeon[0].length == 0)
-            return 0;
-        HashMap<String, Integer> hm = new HashMap<>();
-        return rec(0, 0, dungeon, hm);
-    }
-    
-    private int rec(int i, int j, int[][] dungeon, HashMap<String, Integer> hm) {
-        if(i >= dungeon.length || j >= dungeon[0].length)
-            return Integer.MAX_VALUE;
-        String key = i + "Codebix"  + j;
-        if(hm.containsKey(key))
-             return hm.get(key);
-        int next = Math.min(rec(i+1, j, dungeon, hm), rec(i, j+1, dungeon, hm));
-    
-        if(next == Integer.MAX_VALUE)
-           next  = 1;
-        
-        int res = Math.max(next - dungeon[i][j], 1);
-        hm.put(key, res);
-        return res;
+        int n = dungeon.length;
+        int m = dungeon[0].length;
+
+        // dp[i][j] = minimum HP required to enter cell (i, j)
+        // and still survive until reaching bottom-right
+        int[][] dp = new int[n][m];
+
+        // Last cell (Princess room)
+        dp[n-1][m-1] = Math.max(1 - dungeon[n-1][m-1], 1);
+
+        // Fill last row (only right direction possible)
+        for (int j = m - 2; j >= 0; j--) {
+            dp[n-1][j] = Math.max(dp[n-1][j+1] - dungeon[n-1][j], 1);
+        }
+
+        // Fill last column (only down direction possible)
+        for (int i = n - 2; i >= 0; i--) {
+            dp[i][m-1] = Math.max(dp[i+1][m-1] - dungeon[i][m-1], 1);
+        }
+
+        // Fill remaining grid (choose min health required path)
+        for (int i = n - 2; i >= 0; i--) {
+            for (int j = m - 2; j >= 0; j--) {
+                int minNext = Math.min(dp[i+1][j], dp[i][j+1]);
+                dp[i][j] = Math.max(minNext - dungeon[i][j], 1);
+            }
+        }
+
+        // Minimum health required at start
+        return dp[0][0];
     }
 }
