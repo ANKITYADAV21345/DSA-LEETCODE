@@ -1,28 +1,26 @@
-//codebix
+// CodeBix - Tabulation DP Version (Bottom-Up)
 class Solution {
-    private int maxProfit(int i, int buyOrSell, int[] prices, HashMap<String, Integer> hm) {
-        if (i >= prices.length) 
-            return 0;
-
-        String key = i + "codebix" + buyOrSell;
-        if(hm.containsKey(key))
-            return hm.get(key);
-        int x = 0; 
-        if (buyOrSell == 0) {
-            int buy   =  maxProfit(i + 1, 1, prices, hm) - prices[i];
-            int noBuy =  maxProfit(i + 1, 0, prices, hm); 
-            x = Math.max(buy, noBuy);
-         } else {
-            int sell   = maxProfit(i + 2, 0, prices, hm) + prices[i];
-            int noSell = maxProfit(i + 1, 1, prices, hm);
-            x = Math.max(sell, noSell);
-        }
-        hm.put(key, x);
-        return x;
-    }
-    
     public int maxProfit(int[] prices) {
-        HashMap<String, Integer> hm = new HashMap<>();
-        return maxProfit(0, 0, prices, hm);
+        int n = prices.length;
+        int[][] dp = new int[n + 2][2]; 
+        // n+2 because we will access dp[i+2]
+
+        // Bottom-up fill
+        for (int i = n - 1; i >= 0; i--) {
+
+            // BUY state
+            dp[i][0] = Math.max(
+                -prices[i] + dp[i + 1][1],   // buy
+                dp[i + 1][0]                // no buy
+            );
+
+            // SELL state
+            dp[i][1] = Math.max(
+                prices[i] + dp[i + 2][0],   // sell + cooldown
+                dp[i + 1][1]                // no sell
+            );
+        }
+
+        return dp[0][0]; // start from day 0 with buy allowed
     }
 }
