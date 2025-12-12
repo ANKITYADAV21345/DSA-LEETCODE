@@ -1,41 +1,40 @@
-//apna college dp notes minimum partitioning
 
 class Solution {
+
     public boolean canPartition(int[] nums) {
-        int n=nums.length;
-        int sum=0;
-        for(int i=0;i<nums.length;i++){
-            sum=sum+nums[i];
-        }
+        int n = nums.length;
+        int sum = 0;
 
-        int weight=sum/2;
-        int dp[][]=new int[n+1][weight+1];
+        for (int x : nums) sum += x;
 
-        //initialization step
-        for(int i=0;i<n+1;i++){
-            for(int j=0;j<weight+1;j++){
-                dp[i][j]=0;
-            }
-        }
+        // If total sum is odd → cannot partition equally
+        if (sum % 2 != 0) return false;
 
+        int target = sum / 2;
 
-        //botom up uproach
-        for(int i=1;i<n+1;i++){
-            for(int j=1;j<weight+1;j++){
-                if(nums[i-1]<=j){
-                    dp[i][j]=Math.max(nums[i-1]+dp[i-1][j-nums[i-1]],dp[i-1][j]);
-                }
-                else{
-                    dp[i][j]=dp[i-1][j];
-                }
-            }
-        }
-        int sum1=dp[n][weight];
-        int sum2=sum-sum1;
-        if((sum1-sum2)==0){
-            return true;
-        }else{
-            return false;
-        }
+        Boolean[][] dp = new Boolean[n][target + 1];
+
+        return subsetSum(nums, 0, target, dp);
+    }
+
+    // Top-down recursion + memoization
+    private boolean subsetSum(int[] nums, int i, int target, Boolean[][] dp) {
+
+        // If target reached → valid subset
+        if (target == 0) return true;
+
+        // If no elements left or target < 0 → false
+        if (i == nums.length || target < 0) return false;
+
+        // Memo check
+        if (dp[i][target] != null) return dp[i][target];
+
+        // Choice 1: Take current element
+        boolean take = subsetSum(nums, i + 1, target - nums[i], dp);
+
+        // Choice 2: Skip current element
+        boolean notTake = subsetSum(nums, i + 1, target, dp);
+
+        return dp[i][target] = (take || notTake);
     }
 }
