@@ -1,35 +1,32 @@
-//codebix
 class Solution {
-
     public boolean checkValidString(String s) {
-        char[] chars = s.toCharArray();
-        Stack<Integer> s1 = new Stack<Integer>();
-        Stack<Integer> s2 = new Stack<Integer>();
 
-        for (int i = 0; i < chars.length; i++) {
-            char c = chars[i];
-            if (c == '(') {
-                s1.push(i);
-            } else if (c == ')') {
-                if (!s1.isEmpty()) {
-                    s1.pop();
-                } else if (!s2.isEmpty()) {
-                    s2.pop();
-                } else {
-                    return false;
+        int n = s.length();
+        boolean[][] dp = new boolean[n + 1][n + 1];
+
+        dp[0][0] = true;
+
+        for (int i = 0; i < n; i++) {
+            for (int open = 0; open <= n; open++) {
+
+                if (!dp[i][open]) continue;
+
+                char c = s.charAt(i);
+
+                if (c == '(') {
+                    dp[i + 1][open + 1] = true;
+                } else if (c == ')') {
+                    if (open > 0)
+                        dp[i + 1][open - 1] = true;
+                } else { // '*'
+                    dp[i + 1][open] = true;        // empty
+                    dp[i + 1][open + 1] = true;    // '('
+                    if (open > 0)
+                        dp[i + 1][open - 1] = true; // ')'
                 }
-            } else if (c == '*') {
-                s2.push(i);
             }
         }
 
-        while (!s1.isEmpty() && !s2.isEmpty()) {
-            Integer value = s2.pop();
-            if (s1.peek() < value) {
-                s1.pop();
-            }
-        }
-
-        return s1.isEmpty();
+        return dp[n][0];
     }
 }
