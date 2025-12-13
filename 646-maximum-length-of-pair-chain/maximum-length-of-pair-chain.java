@@ -1,17 +1,27 @@
-//apna college gready algorithm notes
+import java.util.*;
 
 class Solution {
     public int findLongestChain(int[][] pairs) {
-        Arrays.sort(pairs,Comparator.comparingDouble(o->o[1]));
-        int chainLen=1;
-        int lastEnd=pairs[0][1];
 
-        for(int i=0;i<pairs.length;i++){
-            if(pairs[i][0]>lastEnd){
-            chainLen++;
-            lastEnd=pairs[i][1];
+        // Sort pairs by first element
+        Arrays.sort(pairs, (a, b) -> a[0] - b[0]);
+
+        int n = pairs.length;
+        int[] dp = new int[n];
+        Arrays.fill(dp, 1);
+
+        int maxChain = 1;
+
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+
+                if (pairs[j][1] < pairs[i][0]) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
             }
+            maxChain = Math.max(maxChain, dp[i]);
         }
-        return chainLen;
+
+        return maxChain;
     }
 }
