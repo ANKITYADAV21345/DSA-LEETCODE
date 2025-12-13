@@ -1,32 +1,23 @@
-//RECURSION + MEMOISATION
+//TABULATION
 class Solution {
-
-    int[] memo;
-
     public int minSteps(int n) {
-        memo = new int[n + 1];
-        return solve(n);
-    }
 
-    private int solve(int n) {
+        int[] dp = new int[n + 1];
 
-        if (n == 1) return 0;
+        for (int i = 2; i <= n; i++) {
+            dp[i] = i; // worst case
 
-        if (memo[n] != 0)
-            return memo[n];
-
-        int ans = n; // worst case: copy 1, paste (n-1) times
-
-        for (int i = 2; i <= n / 2; i++) {
-            if (n % i == 0) {
-                ans = Math.min(ans, solve(n / i) + i);
+            for (int j = i / 2; j >= 1; j--) {
+                if (i % j == 0) {
+                    dp[i] = Math.min(dp[i], dp[j] + (i / j));
+                }
             }
         }
 
-        memo[n] = ans;
-        return ans;
+        return dp[n];
     }
 }
+
 
 
 
