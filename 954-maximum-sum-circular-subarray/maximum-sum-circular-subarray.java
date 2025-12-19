@@ -1,43 +1,43 @@
 class Solution {
 
+    Integer[] memoMax;
+    Integer[] memoMin;
+
+    private int maxEndingAt(int[] nums, int i) {
+        if (i == 0) return nums[0];
+        if (memoMax[i] != null) return memoMax[i];
+
+        memoMax[i] = Math.max(nums[i], nums[i] + maxEndingAt(nums, i - 1));
+        return memoMax[i];
+    }
+
+    private int minEndingAt(int[] nums, int i) {
+        if (i == 0) return nums[0];
+        if (memoMin[i] != null) return memoMin[i];
+
+        memoMin[i] = Math.min(nums[i], nums[i] + minEndingAt(nums, i - 1));
+        return memoMin[i];
+    }
+
     public int maxSubarraySumCircular(int[] nums) {
 
         int n = nums.length;
+        memoMax = new Integer[n];
+        memoMin = new Integer[n];
 
-        // ---------- TABULATION : MAX SUBARRAY ----------
-        int[] maxDp = new int[n];
-        maxDp[0] = nums[0];
-        int maxSubarraySum = nums[0];
-
-        for (int i = 1; i < n; i++) {
-            maxDp[i] = Math.max(nums[i], maxDp[i - 1] + nums[i]);
-            maxSubarraySum = Math.max(maxSubarraySum, maxDp[i]);
-        }
-
-        // ---------- TABULATION : MIN SUBARRAY ----------
-        int[] minDp = new int[n];
-        minDp[0] = nums[0];
-        int minSubarraySum = nums[0];
-
-        for (int i = 1; i < n; i++) {
-            minDp[i] = Math.min(nums[i], minDp[i - 1] + nums[i]);
-            minSubarraySum = Math.min(minSubarraySum, minDp[i]);
-        }
-
-        // ---------- TOTAL SUM ----------
+        int maxSubarray = Integer.MIN_VALUE;
+        int minSubarray = Integer.MAX_VALUE;
         int totalSum = 0;
-        for (int val : nums) {
-            totalSum += val;
+
+        for (int i = 0; i < n; i++) {
+            maxSubarray = Math.max(maxSubarray, maxEndingAt(nums, i));
+            minSubarray = Math.min(minSubarray, minEndingAt(nums, i));
+            totalSum += nums[i];
         }
 
-        // ---------- EDGE CASE ----------
-        // when all numbers are negative
-        if (totalSum == minSubarraySum) {
-            return maxSubarraySum;
-        }
+        if (totalSum == minSubarray) return maxSubarray;
 
-        // ---------- FINAL ANSWER ----------
-        int circularSubarraySum = totalSum - minSubarraySum;
-        return Math.max(maxSubarraySum, circularSubarraySum);
+        return Math.max(maxSubarray, totalSum - minSubarray);
     }
 }
+
