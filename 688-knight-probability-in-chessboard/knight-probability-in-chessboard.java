@@ -1,38 +1,42 @@
-//codebix
-import java.util.HashMap;
-
+//tabulation
 class Solution {
+
     private int[][] dir = {
-        { -2, -1 }, { -1, -2 }, { 1, -2 }, { 2, -1 },
-        { 2, 1 }, { 1, 2 }, { -1, 2 }, { -2, 1 }
+        {-2, -1}, {-1, -2}, {1, -2}, {2, -1},
+        {2, 1}, {1, 2}, {-1, 2}, {-2, 1}
     };
 
-    private HashMap<String, Double> hm = new HashMap<>();
-
     public double knightProbability(int n, int k, int row, int column) {
-        return find(n, k, row, column);
-    }
 
-    private double find(int n, int k, int row, int column) {
-        if (!isValid(row, column, n)) return 0;
-        if (k == 0) return 1;
+        double[][][] dp = new double[k + 1][n][n];
 
-        String key = row + "," + column + "," + k;
-        if (hm.containsKey(key)) return hm.get(key);
+        // base case
+        dp[0][row][column] = 1.0;
 
-        double probability = 0;
-
-        for (int i = 0; i < dir.length; i++) {
-            int newRow = row + dir[i][0];
-            int newCol = column + dir[i][1];
-            probability += find(n, k - 1, newRow, newCol) / 8.0;
+        for (int step = 1; step <= k; step++) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (dp[step - 1][i][j] > 0) {
+                        for (int d = 0; d < 8; d++) {
+                            int ni = i + dir[d][0];
+                            int nj = j + dir[d][1];
+                            if (ni >= 0 && ni < n && nj >= 0 && nj < n) {
+                                dp[step][ni][nj] += dp[step - 1][i][j] / 8.0;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
-        hm.put(key, probability);
-        return probability;
-    }
+        // sum of probabilities after k moves
+        double ans = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                ans += dp[k][i][j];
+            }
+        }
 
-    private boolean isValid(int row, int column, int n) {
-        return row >= 0 && row < n && column >= 0 && column < n;
+        return ans;
     }
 }
