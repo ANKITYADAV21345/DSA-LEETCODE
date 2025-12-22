@@ -1,24 +1,59 @@
-class Solution {
-    int [] dp;
-    public int maxJumps(int[] arr, int d) {
-        int max=0;
-        dp=new int [arr.length];
-        for(int i=0;i<arr.length;i++){
-            max=Math.max(max,countMaxJump(arr,i,d));
-        }
-        return max;
-    }
+import java.util.*;
 
-    private int countMaxJump(int[] arr,int index,int d){
-        if(dp[index]>0) return dp[index];
-        int result=1;
-        for(int j=index-1;j>=Math.max(index-d,0)&& arr[index]>arr[j];j--){
-            result=Math.max(result,1+countMaxJump(arr,j,d));
+class Solution {
+
+    public int maxJumps(int[] arr, int d) {
+
+        int n = arr.length;
+        int[] dp = new int[n];
+
+        // har index se minimum 1 jump
+        for (int i = 0; i < n; i++) {
+            dp[i] = 1;
         }
-        for(int j=index+1;j<=Math.min(index+d,arr.length-1) && arr[index]>arr[j];j++){
-            result=Math.max(result,1+countMaxJump(arr,j,d));
+
+        // index array
+        int[] idx = new int[n];
+        for (int i = 0; i < n; i++) {
+            idx[i] = i;
         }
-        dp[index]=result;
-        return result;
-    } 
+
+        // 🔁 simple sorting (bubble sort) based on height
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (arr[idx[j]] > arr[idx[j + 1]]) {
+                    int temp = idx[j];
+                    idx[j] = idx[j + 1];
+                    idx[j + 1] = temp;
+                }
+            }
+        }
+
+        // bottom-up DP
+        for (int x = 0; x < n; x++) {
+
+            int id = idx[x];
+
+            // left side
+            for (int j = id - 1; j >= 0 && j >= id - d; j--) {
+                if (arr[j] >= arr[id])
+                    break;
+                dp[id] = Math.max(dp[id], 1 + dp[j]);
+            }
+
+            // right side
+            for (int j = id + 1; j < n && j <= id + d; j++) {
+                if (arr[j] >= arr[id])
+                    break;
+                dp[id] = Math.max(dp[id], 1 + dp[j]);
+            }
+        }
+
+        int ans = 0;
+        for (int i = 0; i < n; i++) {
+            ans = Math.max(ans, dp[i]);
+        }
+
+        return ans;
+    }
 }
