@@ -1,29 +1,24 @@
 //codebix
-import java.util.HashMap;
-
 class Solution {
     public int maxUncrossedLines(int[] A, int[] B) {
-        HashMap<String, Integer> hm = new HashMap<>();
-        return rec(A, 0, B, 0, hm);
-    }
 
-    private int rec(int[] A, int i, int[] B, int j, HashMap<String, Integer> hm) {
-        if (i == A.length || j == B.length) return 0;
+        int n = A.length;
+        int m = B.length;
 
-        String key = i + "#" + j;
-        if (hm.containsKey(key)) return hm.get(key);
+        int[][] dp = new int[n + 1][m + 1];
 
-        int count;
-        if (A[i] == B[j]) {
-            count = 1 + rec(A, i + 1, B, j + 1, hm);
-        } else {
-            count = Math.max(
-                rec(A, i + 1, B, j, hm),
-                rec(A, i, B, j + 1, hm)
-            );
+        // Bottom-Up DP
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) {
+
+                if (A[i - 1] == B[j - 1]) {
+                    dp[i][j] = 1 + dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
         }
 
-        hm.put(key, count);
-        return count;
+        return dp[n][m];
     }
 }
