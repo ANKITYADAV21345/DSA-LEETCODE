@@ -8,37 +8,52 @@
  *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
-
- //nikhil lohia
 class Solution {
     public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
-        // Create a sentinel/dummy node to start
-        ListNode returnNode = new ListNode(Integer.MIN_VALUE);
+        ListNode head=null,ptr=null;
+        if(list1==null) return list2;
+        if(list2==null) return list1;
 
-        // Create a copy of this node to iterate while solving the problem
-        ListNode headNode = returnNode;
-
-        // Traverse till one of the list reaches the end
-        while (list1 != null && list2 != null) {
-            // Compare the 2 values of lists
-            if (list1.val <= list2.val) {
-                returnNode.next = list1;
-                list1 = list1.next;
-            } else {
-                returnNode.next = list2;
-                list2 = list2.next;
+        while(list1!=null && list2!=null)
+        {
+            if(head==null)
+            {
+                if(list1.val<list2.val)
+                {
+                    ptr=head=list1;
+                    list1=list1.next;
+                }
+                else
+                {
+                    ptr=head=list2;
+                    list2=list2.next;  
+                }
+                continue;
             }
-            returnNode = returnNode.next;
+
+            if(list1.val<list2.val)
+            {
+                ptr.next=list1;
+                ptr=list1;
+                list1=list1.next;
+            }
+            else{
+                ptr.next=list2;
+                ptr=list2;
+                list2=list2.next;
+            }
         }
 
-        // Append the remaining list
-        if (list1 == null) {
-            returnNode.next = list2;
-        } else {
-            returnNode.next = list1;
-        }
+        if(list1!=null)
+          ptr.next=list1;
+        else
+          ptr.next=list2;
 
-        // Return the next node to sentinel node
-        return headNode.next;
+        return head;
+           
+
+
+
+        
     }
 }
