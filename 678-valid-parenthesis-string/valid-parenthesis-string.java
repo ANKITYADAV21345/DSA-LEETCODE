@@ -1,42 +1,43 @@
+import java.util.*;
 class Solution {
+    public static boolean checkValidString(String s) {
+        char[] chars=s.toCharArray();
+        Stack<Integer> s1=new Stack<Integer>();
+        Stack<Integer> s2=new Stack<Integer>();
+        for(int i=0;i<chars.length;i++){
+            char c=chars[i];
+            if(c=='('){
+                s1.push(i);
+            }
+            else if(c==')'){
+                if(!s1.isEmpty()){
+                    s1.pop();
+                }
+                else if(!s2.isEmpty()){
+                    s2.pop();
+                }
+                else{
+                    return false;
+                }
+            }
+            else if(c=='*'){
+                s2.push(i);
+            }
+        }
 
-    String s;
-    Boolean[][] memo;
-
-    public boolean checkValidString(String s) {
-        this.s = s;
-        memo = new Boolean[s.length()][s.length() + 1];
-        return dfs(0, 0);
+        while(!s1.isEmpty() && !s2.isEmpty()){
+            Integer value=s2.pop();
+            if(s1.peek()<value){
+                s1.pop();
+            }
+        }
+        return s1.isEmpty();
     }
 
-    private boolean dfs(int index, int open) {
-
-        // invalid
-        if (open < 0) return false;
-
-        // end of string
-        if (index == s.length()) {
-            return open == 0;
-        }
-
-        if (memo[index][open] != null)
-            return memo[index][open];
-
-        char c = s.charAt(index);
-        boolean valid;
-
-        if (c == '(') {
-            valid = dfs(index + 1, open + 1);
-        } else if (c == ')') {
-            valid = dfs(index + 1, open - 1);
-        } else { // '*'
-            valid =
-                dfs(index + 1, open) ||       // empty
-                dfs(index + 1, open + 1) ||   // '('
-                dfs(index + 1, open - 1);     // ')'
-        }
-
-        memo[index][open] = valid;
-        return valid;
+    public static void main(String args[]){
+        Scanner sc=new Scanner(System.in);
+        String s=sc.next();
+        boolean result=checkValidString(s);
+        System.out.print(result);
     }
 }
