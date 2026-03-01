@@ -1,42 +1,31 @@
-//memoisation
 class Solution {
-
-    int[][] memo;
-    Map<Integer, Integer> map;
-
     public int lenLongestFibSubseq(int[] arr) {
-        int n = arr.length;
-        memo = new int[n][n];
-        map = new HashMap<>();
+        int n=arr.length;
+        int [][] dp=new int [n][n];
 
-        for (int i = 0; i < n; i++) {
-            map.put(arr[i], i);
+        Map<Integer,Integer> map=new HashMap<>();
+        for(int i=0;i<n;i++){
+            map.put(arr[i],i);
         }
 
-        int ans = 0;
-        for (int i = 0; i < n; i++) {
-            for (int j = i + 1; j < n; j++) {
-                ans = Math.max(ans, solve(arr, i, j));
+        int ans=0;
+        for(int j=n-1;j>=0;j--){
+            for(int i=j-1;i>=0;i--){
+                int next=arr[i]+arr[j];
+
+                if(map.containsKey(next)){
+                    int k=map.get(next);
+                    dp[i][j]=1+dp[j][k];
+                }else{
+                    dp[i][j]=2;
+                }
+                ans=Math.max(ans,dp[i][j]);
             }
         }
-
-        return ans < 3 ? 0 : ans;
-    }
-
-    private int solve(int[] arr, int i, int j) {
-
-        if (memo[i][j] != 0)
-            return memo[i][j];
-
-        int next = arr[i] + arr[j];
-
-        if (!map.containsKey(next)) {
-            memo[i][j] = 2;
-            return 2;
+        if(ans>=3){
+            return ans;
+        }else{
+            return 0;
         }
-
-        int k = map.get(next);
-        memo[i][j] = 1 + solve(arr, j, k);
-        return memo[i][j];
     }
 }
