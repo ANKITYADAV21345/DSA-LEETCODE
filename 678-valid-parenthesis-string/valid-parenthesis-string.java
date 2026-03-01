@@ -1,43 +1,46 @@
-import java.util.*;
+//convert kiya hai recursion se dp
 class Solution {
-    public static boolean checkValidString(String s) {
-        char[] chars=s.toCharArray();
-        Stack<Integer> s1=new Stack<Integer>();
-        Stack<Integer> s2=new Stack<Integer>();
-        for(int i=0;i<chars.length;i++){
-            char c=chars[i];
-            if(c=='('){
-                s1.push(i);
-            }
-            else if(c==')'){
-                if(!s1.isEmpty()){
-                    s1.pop();
+
+    public boolean checkValidString(String s) {
+
+        int n = s.length();
+        boolean[][] dp = new boolean[n + 1][n + 1];
+
+        // base case
+        dp[n][0] = true;
+
+        for (int index = n - 1; index >= 0; index--) {
+            for (int open = 0; open <= n; open++) {
+
+                char c = s.charAt(index);
+                boolean valid = false;
+
+                if (c == '(') {
+                    if (open + 1 <= n)
+                        valid = dp[index + 1][open + 1];
                 }
-                else if(!s2.isEmpty()){
-                    s2.pop();
+                else if (c == ')') {
+                    if (open - 1 >= 0)
+                        valid = dp[index + 1][open - 1];
                 }
-                else{
-                    return false;
+                else { // '*'
+
+                    // empty
+                    valid = dp[index + 1][open];
+
+                    // '('
+                    if (!valid && open + 1 <= n)
+                        valid = dp[index + 1][open + 1];
+
+                    // ')'
+                    if (!valid && open - 1 >= 0)
+                        valid = dp[index + 1][open - 1];
                 }
-            }
-            else if(c=='*'){
-                s2.push(i);
+
+                dp[index][open] = valid;
             }
         }
 
-        while(!s1.isEmpty() && !s2.isEmpty()){
-            Integer value=s2.pop();
-            if(s1.peek()<value){
-                s1.pop();
-            }
-        }
-        return s1.isEmpty();
-    }
-
-    public static void main(String args[]){
-        Scanner sc=new Scanner(System.in);
-        String s=sc.next();
-        boolean result=checkValidString(s);
-        System.out.print(result);
+        return dp[0][0];
     }
 }
