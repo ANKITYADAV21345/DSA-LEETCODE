@@ -1,28 +1,30 @@
+//apne codebix vale recursion+memoisation ke code ko tabulation me convert kiya hai
 class Solution {
+
     public int change(int amount, int[] coins) {
 
         int n = coins.length;
         int[][] dp = new int[amount + 1][n + 1];
 
-        // Base case: amount = 0
-        for (int j = 0; j <= n; j++) {
-            dp[0][j] = 1;
+        // If currentAmount = 0 → 1 way
+        for (int index = 0; index <= n; index++) {
+            dp[0][index] = 1;
         }
 
-        for (int i = 1; i <= amount; i++) {
-            for (int j = 1; j <= n; j++) {
+        for (int index = n - 1; index >= 0; index--) {
 
-                // Exclude current coin
-                dp[i][j] = dp[i][j - 1];
+            for (int currAmount = 0; currAmount <= amount; currAmount++) {
 
-                // Include current coin
-                if (i - coins[j - 1] >= 0) {
-                    dp[i][j] += dp[i - coins[j - 1]][j];
-                }
+                int include = 0;
+                if (currAmount - coins[index] >= 0)
+                    include = dp[currAmount - coins[index]][index];
+
+                int exclude = dp[currAmount][index + 1];
+
+                dp[currAmount][index] = include + exclude;
             }
         }
 
-        return dp[amount][n];
+        return dp[amount][0];
     }
 }
-
