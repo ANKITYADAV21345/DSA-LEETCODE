@@ -1,40 +1,35 @@
-
+//memoised code ko dp me convert kiya 5 steps ke through 
 class Solution {
 
     public boolean canPartition(int[] nums) {
-        int n = nums.length;
-        int sum = 0;
 
+        int sum = 0;
         for (int x : nums) sum += x;
 
-        // If total sum is odd → cannot partition equally
         if (sum % 2 != 0) return false;
 
         int target = sum / 2;
 
-        Boolean[][] dp = new Boolean[n][target + 1];
+        boolean[][] dp = new boolean[nums.length + 1][target + 1];
 
-        return subsetSum(nums, 0, target, dp);
-    }
+        for (int i = 0; i <= nums.length; i++) {
+            dp[i][0] = true;
+        }
 
-    // Top-down recursion + memoization
-    private boolean subsetSum(int[] nums, int i, int target, Boolean[][] dp) {
+        for (int index = nums.length - 1; index >= 0; index--) {
 
-        // If target reached → valid subset
-        if (target == 0) return true;
+            for (int currentTarget = 1; currentTarget <= target; currentTarget++) {
 
-        // If no elements left or target < 0 → false
-        if (i == nums.length || target < 0) return false;
+                boolean take = false;
+                if (currentTarget - nums[index] >= 0)
+                    take = dp[index + 1][currentTarget - nums[index]];
 
-        // Memo check
-        if (dp[i][target] != null) return dp[i][target];
+                boolean notTake = dp[index + 1][currentTarget];
 
-        // Choice 1: Take current element
-        boolean take = subsetSum(nums, i + 1, target - nums[i], dp);
+                dp[index][currentTarget] = take || notTake;
+            }
+        }
 
-        // Choice 2: Skip current element
-        boolean notTake = subsetSum(nums, i + 1, target, dp);
-
-        return dp[i][target] = (take || notTake);
+        return dp[0][target];
     }
 }
