@@ -1,37 +1,35 @@
-# apna college article
+# map aproach apna college article
+# importing typing module for type hints(optional but good practice)
+from typing import List
 class Solution:
-    def majorityElement(self, nums):
-        n = len(nums)
-        count = 1
-        majority = nums[0]
+    def majorityElement(self, nums: List[int]) -> int:
+        n=len(nums)
+        # dictonary to store frequencies
+        freq={}
 
-        # phase 1 find candidate
-        for i in range(1, n):
-            if nums[i] == majority:
-                count = count + 1
+        # traverse the list and count frequencies
+        for num in nums:
+            # update frequency
+            freq[num]=freq.get(num,0)+1
+
+            if freq[num]>n//2:
+                return num
+        return -1
+
+        # run the test directly
+        if __name__=="__main__":
+            nums=[2,2,1,1,2,2,2]
+
+            # create an object of Solution class
+            Sol=Solution()
+
+            #call the majorityElement methord
+            result=Sol.majorityElement(nums)
+
+            # print the result
+            if result!=-1:
+                print(result)
             else:
-                count = count - 1
-                if count == 0:
-                    majority = nums[i]
-                    count = 1
+                print(-1)
 
-        # phase 2 verify candidate
-        if nums.count(majority) > n // 2:
-            return majority
-        else:
-            return -1
-
-
-if __name__ == "__main__":
-    nums = [2,2,1,1,2,2,2]
-
-    Sol = Solution()
-    result = Sol.majorityElement(nums)
-
-    if result != -1:
-        print(result)
-    else:
-        print(-1)
-
-        
         
