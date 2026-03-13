@@ -1,22 +1,41 @@
-//apna college notes
+//apna colege article 
 class Solution {
     public int majorityElement(int[] nums) {
-        HashMap<Integer,Integer> map=new HashMap<>();
-        for(int i=0;i<nums.length;i++){
-            if(map.containsKey(nums[i])){
-                map.put(nums[i],map.get(nums[i])+1);
+        int n=nums.length;
+        int count=1;
+        int majority=nums[0];//assuming the first element as candidate
+
+
+        //phase 1:find potential majority candidate
+        for(int i=0;i<n;i++){
+            if(nums[i]==majority){
+                count++;
             }
             else{
-                map.put(nums[i],1);
+                count--;
+                if(count==0){
+                    majority=nums[i];
+                    count=1;
+                }
             }
         }
 
-        Set<Integer> keySet=map.keySet();
-        for(int key:keySet){
-            if(map.get(key)>nums.length/2){
-                return key;
+        //phase 2 verify the candidate
+        count=0;
+        for(int i=0;i<n;i++){
+            if(nums[i]==majority){
+                count++;
             }
         }
-        return 0;
+
+        //return the element if it occur more then  n/2
+        if(count>=n/2){
+            return majority;
+        }else{
+            return -1;
+        }
+
+
+
     }
 }
