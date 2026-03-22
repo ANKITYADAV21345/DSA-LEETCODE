@@ -1,4 +1,4 @@
-//algodaily
+//algodaily   optimised through formula 
 //13-03-2026
 class Solution {
     public long minNumberOfSeconds(int mountainHeight, int[] workerTimes) {
@@ -31,18 +31,15 @@ class Solution {
     }
 
     public boolean isPossible(long time,int height,int [] worker){
-        //now cheak
-        for(int i=0;i<worker.length;i++){
-            long j=1L;
-            long curr=0;
+        long totalHeight=0;
 
-            while(height>0 && curr +j*worker[i]<=time){
-                curr=curr+j*worker[i];
-                j++;
-                height--;
-            }
-            //early cheak
-            if(height==0){
+        for(int element:worker){
+            long k=(long)((Math.sqrt(1+(8.0*time)/element)-1)/2);
+
+            totalHeight=totalHeight+k;
+
+            //cheak
+            if(totalHeight>=height){
                 return true;
             }
         }
