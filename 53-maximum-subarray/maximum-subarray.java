@@ -1,24 +1,15 @@
-//done by own(tabular)
-
-
-
-// dp = [-2, 1, -2, 4, 3, 5, 6, 1, 5]
-// dp[i] = i par khatam hone wale maximum subarray sum
-
+//apna college beter aproach in article 
 class Solution {
     public int maxSubArray(int[] nums) {
-        int n = nums.length;
-        int[] dp = new int[n];
-        
-        dp[0] = nums[0];
-        int ans = nums[0];
+        int n=nums.length;
+        int [] dp=new int[n];
+        dp[0]=nums[0];
+        int maxSum=nums[0];
 
-        for(int i = 1; i < n; i++) {
-            // Recurrence formula:
-            dp[i] = nums[i] + Math.max(0, dp[i-1]);
-            ans = Math.max(ans, dp[i]);
+        for(int i=1;i<n;i++){
+            dp[i]=Math.max(nums[i],nums[i]+dp[i-1]);
+            maxSum=Math.max(maxSum,dp[i]);
         }
-
-        return ans;
+        return maxSum;
     }
 }
