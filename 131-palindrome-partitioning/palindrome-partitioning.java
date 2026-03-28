@@ -1,44 +1,50 @@
-//code shash
-import java.util.ArrayList;
-import java.util.List;
+//apna college
 
-class Solution {
-    List<List<String>> res = new ArrayList<>();
-    int n;
-
-    public List<List<String>> partition(String s) {
-        n = s.length();
-        recur(s, 0, new ArrayList<>());
-        return res;
-    }
-
-    public boolean isPalindrome(String s, int start, int end) {
-        while (start < end) {
-            if (s.charAt(start) != s.charAt(end)) {
-                return false;
-            }
-            start++;
-            end--;
+// check palindrome
+class Solution{
+    public static boolean isPalin(String s) {
+        int i = 0, j = s.length() - 1;
+        while (i < j) {
+            if (s.charAt(i) != s.charAt(j)) return false;
+            i++;
+            j--;
         }
         return true;
     }
 
-    public void recur(String s, int partIndex, List<String> sublist) {
-        // Base case
-        if (partIndex == n) {
-            res.add(new ArrayList<>(sublist));
+    // backtracking
+    public static void getAllParts(String s, List<String> partitions,               List<List<String>> ans) {
+
+        if (s.length() == 0) {
+            ans.add(new ArrayList<>(partitions));
             return;
         }
-        // Explore the possibilities
-        for (int end = partIndex; end < n; end++) {
-            if (isPalindrome(s, partIndex, end)) { // <-- Fixed here
-                // Add to list
-                sublist.add(s.substring(partIndex, end + 1));
-                // Explore
-                recur(s, end + 1, sublist);
-                // Backtrack
-                sublist.remove(sublist.size() - 1);
+
+        for (int i = 0; i < s.length(); i++) {
+            String part = s.substring(0, i + 1);
+
+            if (isPalin(part)) {
+                partitions.add(part);
+                getAllParts(s.substring(i + 1), partitions, ans);
+                partitions.remove(partitions.size() - 1); // backtrack
             }
+        }
+    }
+
+    public static List<List<String>> partition(String s) {
+        List<List<String>> ans = new ArrayList<>();
+        List<String> partitions = new ArrayList<>();
+
+        getAllParts(s, partitions, ans);
+        return ans;
+    }
+
+    public static void main(String[] args) {
+        String s = "aab";
+        List<List<String>> result = partition(s);
+
+        for (List<String> list : result) {
+            System.out.println(list);
         }
     }
 }
