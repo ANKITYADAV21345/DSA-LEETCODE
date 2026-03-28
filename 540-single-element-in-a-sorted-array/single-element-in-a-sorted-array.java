@@ -1,19 +1,57 @@
-//codebix
+//apna college
 class Solution {
     public int singleNonDuplicate(int[] nums) {
         int n = nums.length;
-        int lo = 0, hi = n - 1;
-        while (lo < hi) {
-            int mid = lo + (hi - lo) / 2;
-            if ((mid % 2 == 0 && mid + 1 < n && nums[mid] == nums[mid + 1]) ||
-                    (mid % 2 == 1 && mid - 1 >= 0 && nums[mid] == nums[mid - 1]))
-                lo = mid + 1;
-            else
-                hi = mid;
 
-            if (mid - 1 >= 0 && mid + 1 < n && nums[mid] != nums[mid + 1] && nums[mid] != nums[mid - 1])
+        if (n == 1) return nums[0];
+
+        int start = 0;
+        int end = n - 1;
+
+        while (start <= end) {
+            int mid = start + (end - start) / 2;
+
+            // edge cases safe bana diye
+            if (mid == 0) {
+                if (nums[0] != nums[1]){
+                    return nums[0];
+                }
+                else{
+                    start = mid + 1;
+                }
+                continue;
+            }
+            if (mid == n - 1) {
+                if (nums[n - 1] != nums[n - 2]){
+                    return nums[n - 1];
+                }
+                else{
+                    end = mid - 1;
+                }
+                continue;
+            }
+
+            //unique element 
+            if (nums[mid - 1] != nums[mid] && nums[mid] != nums[mid + 1]) {
                 return nums[mid];
+            }
+
+            //binary logic
+            if (mid % 2 == 0) { // even index
+                if (nums[mid] == nums[mid + 1]) {
+                    start = mid + 2;
+                } else {
+                    end = mid - 1;
+                }
+            } else { // odd index
+                if (nums[mid] == nums[mid - 1]) {
+                    start = mid + 1;
+                } else {
+                    end = mid - 1;
+                }
+            }
         }
-        return nums[lo];
+
+        return -1;
     }
 }
