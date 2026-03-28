@@ -1,29 +1,46 @@
-class Solution {
-    public List<List<Integer>> subsetsWithDup(int[] nums) {
-        List<List<Integer>> resultList = new ArrayList<>();
-        Arrays.sort(nums);
+//apna college
+class Solution{
+    public static void getAllSubsets(int[] nums, List<Integer> ans, int i, List<List<Integer>> allSubsets) {
+            if (i == nums.length) {
+                allSubsets.add(new ArrayList<>(ans));
+                return;
+            }
 
-        // Start backtracking from the beginning
-        backtrack(resultList, new ArrayList<>(), nums, 0);
-        return resultList;
-    }
+            // include
+            ans.add(nums[i]);
+            getAllSubsets(nums, ans, i + 1, allSubsets);
 
-    private void backtrack(List<List<Integer>> resultSets, List<Integer> tempSet,int[] nums, int start) {
-        // If the set is already present, just continue
-        if (resultSets.contains((tempSet)))
-        return;
+            // backtrack
+            ans.remove(ans.size() - 1);
 
-        resultSets.add(new ArrayList<>(tempSet));
+            // skip duplicates
+            int idx = i + 1;
+            while (idx < nums.length && nums[idx] == nums[idx - 1]) {
+                idx++;
+            }
 
-        for (int i = start; i < nums.length; i++) {
-        // Case of including the number
-        tempSet.add(nums[i]);
+            // exclude
+            getAllSubsets(nums, ans, idx, allSubsets);
+        }
 
-        // Backtrack the new subset
-        backtrack(resultSets, tempSet, nums, i + 1);
+        public static List<List<Integer>> subsetsWithDup(int[] nums) {
+            Arrays.sort(nums);
 
-        // Case of not-including the number
-        tempSet.remove(tempSet.size() - 1);
+            List<List<Integer>> allSubsets = new ArrayList<>();
+            List<Integer> ans = new ArrayList<>();
+
+            getAllSubsets(nums, ans, 0, allSubsets);
+
+            return allSubsets;
+        }
+
+        public static void main(String[] args) {
+            int[] nums = {1, 2, 2};
+
+            List<List<Integer>> result = subsetsWithDup(nums);
+
+            for (List<Integer> subset : result) {
+                System.out.println(subset);
+            }
         }
     }
-}
