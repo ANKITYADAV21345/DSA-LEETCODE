@@ -1,35 +1,46 @@
-//codebix
-class Solution {
-    private int[][] dir = {{2,1},{1,2},{-1,2},{-2,1},{-2,-1},{-1,-2},{1,-2},{2,-1}};
+//apna college 
+import java.util.*;
 
-    public boolean checkValidGrid(int[][] grid) {
-        int n = grid.length;
-        int m = grid[0].length;
+public class Solution {
 
-        // Tour must start at top-left corner with 0
-        if (grid[0][0] != 0) return false;
+    public static boolean isValid(int[][] grid, int r, int c, int n, int expVal) {
 
-        int[] pos = {0, 0};  // starting position
-
-        for (int step = 1; step < n * m; step++) {
-            boolean found = false;
-            for (int[] d : dir) {
-                int newRow = pos[0] + d[0];
-                int newCol = pos[1] + d[1];
-                if (isValid(newRow, newCol, n, m) && grid[newRow][newCol] == step) {
-                    pos[0] = newRow;
-                    pos[1] = newCol;
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) return false;
+        // out of bounds or wrong value
+        if (r < 0 || c < 0 || r >= n || c >= n || grid[r][c] != expVal) {
+            return false;
         }
 
-        return true;
+        // last cell reached
+        if (expVal == n * n - 1) {
+            return true;
+        }
+
+        // 8 possible knight moves
+        boolean ans1 = isValid(grid, r - 2, c + 1, n, expVal + 1);
+        boolean ans2 = isValid(grid, r - 1, c + 2, n, expVal + 1);
+        boolean ans3 = isValid(grid, r + 1, c + 2, n, expVal + 1);
+        boolean ans4 = isValid(grid, r + 2, c + 1, n, expVal + 1);
+        boolean ans5 = isValid(grid, r + 2, c - 1, n, expVal + 1);
+        boolean ans6 = isValid(grid, r + 1, c - 2, n, expVal + 1);
+        boolean ans7 = isValid(grid, r - 1, c - 2, n, expVal + 1);
+        boolean ans8 = isValid(grid, r - 2, c - 1, n, expVal + 1);
+
+        return ans1 || ans2 || ans3 || ans4 || ans5 || ans6 || ans7 || ans8;
     }
 
-    private boolean isValid(int r, int c, int n, int m) {
-        return r >= 0 && r < n && c >= 0 && c < m;
+    public static boolean checkValidGrid(int[][] grid) {
+        return isValid(grid, 0, 0, grid.length, 0);
+    }
+
+    public static void main(String[] args) {
+        int[][] grid = {
+            {0, 11, 16, 5, 20},
+            {17, 4, 19, 10, 15},
+            {12, 1, 8, 21, 6},
+            {3, 18, 23, 14, 9},
+            {24, 13, 2, 7, 22}
+        };
+
+        System.out.println(checkValidGrid(grid)); // true/false
     }
 }
