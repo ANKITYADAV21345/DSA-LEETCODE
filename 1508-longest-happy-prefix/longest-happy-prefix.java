@@ -1,22 +1,28 @@
+//bharat khanna
+
+// sir ne isme array initialize karke usme s ke sare character dale hai and fir uss array me kam kiyab hai  lps vala 
 class Solution {
     public String longestPrefix(String s) {
-        int[] dp = new int[s.length()];
-        int len = 0, i = 1;
-        while(i < s.length()){
-            if(s.charAt(i) == s.charAt(len)){
-                dp[i] = ++len;
-                i++;
+        int n = s.length();
+        int[] lps = new int[n]; // prefix array (LPS)
+
+        for (int i = 1; i < n; i++) {
+            int j = lps[i - 1];
+
+            
+
+            while (j > 0 && s.charAt(i) != s.charAt(j)) {
+                j = lps[j - 1];
             }
-            else{
-                if(len>0){
-                    len = dp[len-1];
-                }
-                else{
-                    dp[i] = 0;
-                    i++;
-                }
+
+            if (s.charAt(i) == s.charAt(j)) {
+                j++;
             }
+
+            lps[i] = j;
         }
-        return s.substring(0,dp[dp.length-1]);
+
+        // The length of the longest prefix which is also suffix is lps[n-1]
+        return s.substring(0, lps[n - 1]);
     }
 }
