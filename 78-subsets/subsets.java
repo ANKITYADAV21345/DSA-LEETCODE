@@ -1,25 +1,30 @@
+//apna college
 class Solution {
-    public List<List<Integer>> subsets(int[] nums) {
-    List<List<Integer>> resultList = new ArrayList<>();
 
-    // Start backtracking from the beginning
-    backtrack(resultList, new ArrayList<>(), nums, 0);
-    return resultList;
+    public void getAllSubsets(int[] nums,List<Integer> ans,int i,List<List<Integer>> allSubsets){
+
+        //base case
+        if(i==nums.length){
+            allSubsets.add(new ArrayList<>(ans));
+            return;
+        }
+
+        //include
+        ans.add(nums[i]);
+        getAllSubsets(nums,ans,i+1,allSubsets);
+
+        //backtrack
+        ans.remove(ans.size()-1);
+
+        //exclude
+        getAllSubsets(nums,ans,i+1,allSubsets);
     }
 
-    private void backtrack(List<List<Integer>> resultSets, List<Integer> tempSet,int[] nums, int start) {
-        // Add the set to result set
-        resultSets.add(new ArrayList<>(tempSet));
-        for (int i = start; i < nums.length; i++) {
 
-        // Case of including the number
-        tempSet.add(nums[i]);
-
-        // Backtrack the new subset
-        backtrack(resultSets, tempSet, nums, i + 1);
-
-        // Case of not-including the number
-        tempSet.remove(tempSet.size() - 1);
-        }
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> allSubsets=new ArrayList<>();
+        List<Integer> ans=new ArrayList<>();
+        getAllSubsets(nums,ans,0,allSubsets);
+        return allSubsets;
     }
 }
