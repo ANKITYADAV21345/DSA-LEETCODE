@@ -8,52 +8,34 @@
  *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
+
+
+//apna college
+ //good question maam ne recursive aprocha batayi use feel ati hai
+
+
+//  “Har step par chhoti value wala node choose karke uske next ko recursively merge karo, aur wahi node result ka head banta hai.”
 class Solution {
-    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
-        ListNode head=null,ptr=null;
-        if(list1==null) return list2;
-        if(list2==null) return list1;
-
-        while(list1!=null && list2!=null)
-        {
-            if(head==null)
-            {
-                if(list1.val<list2.val)
-                {
-                    ptr=head=list1;
-                    list1=list1.next;
-                }
-                else
-                {
-                    ptr=head=list2;
-                    list2=list2.next;  
-                }
-                continue;
-            }
-
-            if(list1.val<list2.val)
-            {
-                ptr.next=list1;
-                ptr=list1;
-                list1=list1.next;
-            }
-            else{
-                ptr.next=list2;
-                ptr=list2;
-                list2=list2.next;
+    public ListNode mergeTwoLists(ListNode head1, ListNode head2) {
+        
+        //base case
+        //case 1
+        if(head1==null||head2==null){
+            if(head1==null){
+                return head2;
+            }else{
+                return head1;
             }
         }
 
-        if(list1!=null)
-          ptr.next=list1;
-        else
-          ptr.next=list2;
-
-        return head;
-           
-
-
-
+        //case1
+        if(head1.val<=head2.val){
+            head1.next=mergeTwoLists(head1.next,head2);
+            return head1;
+        }else{//case2
+            head2.next=mergeTwoLists(head1,head2.next);
+            return head2;
+        }
         
     }
 }
