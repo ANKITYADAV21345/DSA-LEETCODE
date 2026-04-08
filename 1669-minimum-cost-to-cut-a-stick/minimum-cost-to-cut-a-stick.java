@@ -1,58 +1,62 @@
-
-//recursive+ memoisation
-import java.util.Arrays;
+//codestorrywithmik
+//feel dila di sir ne issi se samajna 
+import java.util.*;
 
 class Solution {
 
-    int[][] memo;
-    int[] newCuts;
+    static int[][] t = new int[103][103];
+
+    public static int solve(int[] cuts, int left, int right) {
+
+        if (right - left == 1)
+            return 0;
+
+        if (t[left][right] != -1)
+            return t[left][right];
+
+        int result = Integer.MAX_VALUE;
+
+        for (int index = left + 1; index <= right - 1; index++) {
+
+            int cost = solve(cuts, left, index)
+                    + solve(cuts, index, right)
+                    + (cuts[right] - cuts[left]);
+
+            result = Math.min(result, cost);
+        }
+
+        return t[left][right] = result;
+    }
 
     public int minCost(int n, int[] cuts) {
 
-        int c = cuts.length;
+        int m = cuts.length;
+        int[] newCuts = new int[m + 2];
 
-        // 0 aur n ko include karna
-        newCuts = new int[c + 2];
+        // add 0 and n
         newCuts[0] = 0;
-        newCuts[c + 1] = n;
+        newCuts[m + 1] = n;
 
-        for (int i = 0; i < c; i++) {
+        for (int i = 0; i < m; i++) {
             newCuts[i + 1] = cuts[i];
         }
 
-        // cuts sort karna
         Arrays.sort(newCuts);
 
-        // memo array
-        memo = new int[c + 2][c + 2];
-        for (int i = 0; i < c + 2; i++) {
-            for (int j = 0; j < c + 2; j++) {
-                memo[i][j] = -1;
-            }
+        // initialize dp with -1
+        for (int i = 0; i < 103; i++) {
+            Arrays.fill(t[i], -1);
         }
 
-        return rec(0, c + 1);
+        return solve(newCuts, 0, m + 1);
     }
 
-    private int rec(int i, int j) {
+    // optional main for testing
+    public static void main(String[] args) {
+        Solution obj = new Solution();
+        int n = 7;
+        int[] cuts = {1, 3, 4, 5};
 
-        // base case: agar beech me koi cut nahi hai
-        if (j - i <= 1)
-            return 0;
-
-        // memo check
-        if (memo[i][j] != -1)
-            return memo[i][j];
-
-        int minCost = Integer.MAX_VALUE;
-
-        // har possible cut k try karo
-        for (int k = i + 1; k < j; k++) {
-            int cost = rec(i, k) + rec(k, j) + (newCuts[j] - newCuts[i]);
-            minCost = Math.min(minCost, cost);
-        }
-
-        memo[i][j] = minCost;
-        return minCost;
+        System.out.println(obj.minCost(n, cuts));
     }
 }
