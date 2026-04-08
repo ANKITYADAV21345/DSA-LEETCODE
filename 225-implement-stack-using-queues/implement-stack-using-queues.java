@@ -1,39 +1,42 @@
-//nikhil lohia
+//apna college
 class MyStack {
 
-    private Queue<Integer> queue;
-
+    Queue<Integer> queue1=new LinkedList<>();
+    Queue<Integer> queue2=new LinkedList<>();
     public MyStack() {
-        queue = new LinkedList<>();
+        
     }
+    
+    public void push(int x) {  //o(n)
+        //move all elements from queue1 to queue2
+        while(!queue1.isEmpty()){
+            queue2.add(queue1.peek());
+            queue1.remove();
+        }
 
-    public void push(int x) {
-        queue.add(x);
-        for (int i = 1; i < queue.size(); i++)
-            queue.add(queue.remove());
+        //push new element into queue1
+        queue1.add(x);
+
+        //move everything back to queue1
+        while(!queue2.isEmpty()){
+            queue1.add(queue2.peek());
+            queue2.remove();
+        }
 
     }
-
-    public int pop() {
-        return queue.remove();
+    
+    public int pop() {  //o(1)
+        int ans=queue1.peek();
+        queue1.remove();
+        return ans;
     }
-
-    public int top() {
-        return queue.peek();
+    
+    public int top() {  //o(1)
+        return queue1.peek();
     }
-
-    public boolean empty() {
-        return queue.isEmpty();
-    }
-
-    public static void main(String[] args) {
-        MyStack stack = new MyStack();
-        stack.push(1);
-        stack.push(2);
-        System.out.println(stack.top()); // returns 2
-        stack.pop();
-        System.out.println(stack.pop()); // returns 1
-        System.out.println(stack.empty()); // returns false
+    
+    public boolean empty() {  //o(1)
+        return queue1.isEmpty();
     }
 }
 
