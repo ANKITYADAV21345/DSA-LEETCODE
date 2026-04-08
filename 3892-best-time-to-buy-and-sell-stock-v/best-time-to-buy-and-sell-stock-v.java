@@ -1,66 +1,60 @@
-//codestorywithmik 
-//recursion
+//codestory with mik tabulation converted from previous recursion
+//dp ka concept ache se clear kiya hai feel ke sath 
 class Solution {
-    static long[][][] dp;
-
-    // CASE:
-    // 0 -> nothing started
-    // 1 -> normal buy done, need to sell
-    // 2 -> short sell done, need to buy back
-
-    static long solve(int i, int k, int state, int[] prices) {
-
-        // base case
-        if (i == prices.length) {
-            if (state == 0) return 0;
-            return Integer.MIN_VALUE; // invalid unfinished transaction
-        }
-
-        if (dp[i][k][state] != Long.MIN_VALUE) {
-            return dp[i][k][state];
-        }
-
-        long take = Long.MIN_VALUE;
-        long dontTake;
-
-        // skip
-        dontTake = solve(i + 1, k, state, prices);
-
-        // take action
-        if (k > 0) {
-
-            if (state == 1) {
-                // sell (complete normal transaction)
-                take = prices[i] + solve(i + 1, k - 1, 0, prices);
-            }
-            else if (state == 2) {
-                // buy back (complete short transaction)
-                take = -prices[i] + solve(i + 1, k - 1, 0, prices);
-            }
-            else {
-                // start transaction
-                long buy = -prices[i] + solve(i + 1, k, 1, prices);
-                long shortSell = prices[i] + solve(i + 1, k, 2, prices);
-
-                take = Math.max(buy, shortSell);
-            }
-        }
-
-        return dp[i][k][state] = Math.max(take, dontTake);
-    }
-
-    static long maximumProfit(int[] prices, int k) {
+    public static long maximumProfit(int[] prices, int K) {
         int n = prices.length;
 
-        dp = new long[n][k + 1][3];
+        long[][][] t = new long[n + 1][K + 1][3];
 
-        // initialize with Long.MIN_VALUE
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j <= k; j++) {
-                Arrays.fill(dp[i][j], Long.MIN_VALUE);
+        // Base case: i == n
+        for (int k = 0; k <= K; k++) {
+            t[n][k][0] = 0;
+            t[n][k][1] = Long.MIN_VALUE;
+            t[n][k][2] = Long.MIN_VALUE;
+        }
+
+        // Fill DP table bottom-up
+        for (int i = n - 1; i >= 0; i--) {
+            for (int k = 0; k <= K; k++) {
+
+                // CASE 0: no transaction in progress
+                t[i][k][0] = t[i + 1][k][0]; // do nothing
+
+                if (k > 0) {
+                    if (t[i + 1][k][1] != Long.MIN_VALUE) {
+                        t[i][k][0] = Math.max(t[i][k][0],
+                        -prices[i] + t[i + 1][k][1]);
+                    }
+
+                    if (t[i + 1][k][2] != Long.MIN_VALUE) {
+                    t[i][k][0] = Math.max(t[i][k][0],
+                    prices[i] + t[i + 1][k][2]);
+                    }
+                }
+
+                // CASE 1: holding long (bought already)
+                t[i][k][1] = t[i + 1][k][1]; // hold
+
+                if (k > 0 && t[i + 1][k - 1][0] != Long.MIN_VALUE) {
+                    t[i][k][1] = Math.max(
+                    t[i][k][1],
+                    prices[i] + t[i + 1][k - 1][0]
+                    );
+                }
+
+                // CASE 2: holding short
+                t[i][k][2] = t[i + 1][k][2]; // hold
+
+                
+                if (k > 0 && t[i + 1][k - 1][0] != Long.MIN_VALUE) {
+                    t[i][k][2] = Math.max(
+                    t[i][k][2],
+                    -prices[i] + t[i + 1][k - 1][0]
+                    );
+                }
             }
         }
 
-        return solve(0, k, 0, prices);
+        return t[0][K][0];
     }
 }
