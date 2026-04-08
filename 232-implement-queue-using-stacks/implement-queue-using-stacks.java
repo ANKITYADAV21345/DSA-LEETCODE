@@ -1,37 +1,36 @@
+//apna college
 class MyQueue {
-
-    private final Stack<Integer> input;
-    private final Stack<Integer> output;
-
-     public MyQueue() {
-        input = new Stack<>();
-        output = new Stack<>();
+    Stack<Integer> s1=new Stack<>();
+    Stack<Integer> s2=new Stack<>();
+    public MyQueue() {
+        
     }
-
+    
     public void push(int x) {
-        input.push(x);
-    }
-    public int pop() {
-        peek();
-        return output.pop();
-    }
-    public int peek() {
-        if (output.empty())
-        while (!input.empty())
-        output.push(input.pop());
-        return output.peek();
-    }
-    public boolean empty() {
-        return input.empty() && output.empty();
-    }
+        while(!s1.isEmpty()){
+            s2.push(s1.peek());
+            s1.pop();
+        }
+        s1.push(x);
 
-    public static void main(String[] args) {
-        MyQueue queue = new MyQueue();
-        queue.push(1);
-        queue.push(2);
-        System.out.println(queue.peek());  // returns 1
-        System.out.println(queue.pop());   // returns 1
-        System.out.println(queue.empty()); // returns false
+        while(!s2.isEmpty()){
+            s1.push(s2.peek());
+            s2.pop();
+        }
+    }
+    
+    public int pop() {
+        int ans=s1.peek();
+        s1.pop();
+        return ans;
+    }
+    
+    public int peek() {
+        return s1.peek();
+    }
+    
+    public boolean empty() {
+        return s1.isEmpty();
     }
 }
 
