@@ -1,32 +1,28 @@
-//khud se kiya haio(n square) me
+//apna college
 class Solution {
     public int[] nextGreaterElement(int[] nums1, int[] nums2) {
-        int[] result = new int[nums1.length];
+        Stack<Integer> s=new Stack<>();
+        HashMap<Integer,Integer> map=new HashMap<>();
 
-        for (int i = 0; i < nums1.length; i++) {
-            int element = nums1[i];
-            int indexInNums2 = -1;
-
-            // nums2 me element ka index dhoondo
-            for (int j = 0; j < nums2.length; j++) {
-                if (nums2[j] == element) {
-                    indexInNums2 = j;
-                    break;
-                }
+        //nums 2 me next greater element nikaluga maam ki tarah
+        for(int i=nums2.length-1;i>=0;i--){
+            while(!s.isEmpty() &&s.peek()<=nums2[i] ){
+                s.pop();
             }
 
-            // ab us index ke baad next greater dhoondo
-            int nextGreater = -1;
-            for (int k = indexInNums2 + 1; k < nums2.length; k++) {
-                if (nums2[k] > element) {
-                    nextGreater = nums2[k];
-                    break;
-                }
+            if(s.isEmpty()){
+                map.put(nums2[i],-1);
             }
-
-            result[i] = nextGreater;
+            else{
+                map.put(nums2[i],s.peek());
+            }
+            s.push(nums2[i]);
         }
-
-        return result;
+        //build ans for nums1
+        int [] ans=new int [nums1.length];
+        for(int i=0;i<nums1.length;i++){
+            ans[i]=map.get(nums1[i]);
+        }
+        return ans;
     }
 }
