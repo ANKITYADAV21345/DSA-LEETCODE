@@ -16,39 +16,38 @@
 
 
 
- //nikhil lohia
+//apna college
 class Solution {
-    public TreeNode buildTree(int[] preorder, int[] inorder) {
-        Map<Integer, Integer> inOrderIndexMap = new HashMap<>();
-        for (int i = 0; i < inorder.length; i++) {
-            inOrderIndexMap.put(inorder[i], i);
-        }
 
-        return splitTree(preorder, inOrderIndexMap,
-                0, 0, inorder.length - 1);
-    }
+    static int preIdx = 0;
 
-    private TreeNode splitTree(int[] preorder, Map<Integer, Integer> inOrderIndexMap,
-            int rootIndex, int left, int right) {
-
-        // Base case: invalid subtree
-        if (left > right || rootIndex >= preorder.length) {
+    public TreeNode helper(int[] preorder, int[] inorder, int left, int right) {
+        if (left > right) {
             return null;
         }
 
-        TreeNode root = new TreeNode(preorder[rootIndex]);
+        TreeNode root = new TreeNode(preorder[preIdx]);
+        preIdx++;
 
-        int mid = inOrderIndexMap.get(preorder[rootIndex]);
+        int inIdx = search(inorder, left, right, root.val);
 
-        int leftSubtreeSize = mid - left;
-
-        // Recursively build left and right subtrees
-        root.left = splitTree(preorder, inOrderIndexMap,
-                rootIndex + 1, left, mid - 1);
-
-        root.right = splitTree(preorder, inOrderIndexMap,
-                rootIndex + leftSubtreeSize + 1, mid + 1, right);
+        root.left = helper(preorder, inorder, left, inIdx - 1);
+        root.right = helper(preorder, inorder, inIdx + 1, right);
 
         return root;
+    }
+
+    public int search(int[] inorder, int left, int right, int key) {
+        for (int i = left; i <= right; i++) {
+            if (inorder[i] == key) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        preIdx = 0; // reset important hai
+        return helper(preorder, inorder, 0, inorder.length - 1);
     }
 }
