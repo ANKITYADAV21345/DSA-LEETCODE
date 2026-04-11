@@ -9,42 +9,36 @@
  * }
  */
 
-
- //code storywithmik
- //iterative
+ //codestorywithmik
+ //recursive
 class Solution {
     public ListNode insertGreatestCommonDivisors(ListNode head) {
-        if(head==null|| head.next==null){
+        if(head==null || head.next==null){
             return head;
         }
 
+        ListNode temp=insertGreatestCommonDivisors(head.next);
         ListNode curNode=head;
         ListNode nextNode=head.next;
 
-        while(nextNode!=null){
+        //gcd ki value nikal rahe hai dono node se 
+        int a = Math.abs(curNode.val);
+        int b = Math.abs(nextNode.val);
 
-            //gcd ki value nikal rahe hai dono node se 
-            int a = Math.abs(curNode.val);
-            int b = Math.abs(nextNode.val);
-
-            // Euclidean algorithm
-            while (b != 0) {
-                int temp = b;
-                b = a % b;
-                a = temp;
-            }
-
-            //node bana rahe hai gcd ki
-            ListNode temp=new ListNode(a);
-
-            //curr->gcd(cur,temp)->temp
-            curNode.next=temp;
-            temp.next=nextNode;
-
-            //age badne ham gcd age ki nodes nikalne ke liye
-            curNode=nextNode;
-            nextNode=nextNode.next;
+        // Euclidean algorithm
+        while (b != 0) {
+            int temp1 = b;
+            b = a % b;
+            a = temp1;
         }
+
+        //node bana rahe hai gcd ki
+        ListNode gcdNode=new ListNode(a);
+
+        gcdNode.next=temp;
+        head.next=gcdNode;
+
         return head;
+
     }
 }
