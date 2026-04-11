@@ -14,29 +14,37 @@
  * }
  */
 
-//saurin majumdar
+
+ //apna college 
 class Solution {
-    private int minDiff = Integer.MAX_VALUE;
-    private TreeNode prev = null;
-
+    TreeNode prev=null;
     public int minDiffInBST(TreeNode root) {
-        inorder(root);
-        return minDiff;
-    }
-
-    private void inorder(TreeNode root) {
-        if (root == null) {
-            return;
+        //base case
+        if(root==null){
+            return Integer.MAX_VALUE;
         }
 
-        inorder(root.left);
-
-        if (prev != null) {
-            int diff = Math.abs(prev.val - root.val);
-            minDiff = Math.min(minDiff, diff);
+        //kam
+        int ans=Integer.MAX_VALUE;
+        //left
+        if(root.left!=null){
+            int leftMin=minDiffInBST(root.left);
+            ans=Math.min(ans,leftMin);
         }
 
-        prev = root;
-        inorder(root.right);
+        //root
+        if(prev!=null){
+            ans=Math.min(ans,root.val-prev.val);
+        }
+        prev=root;
+
+
+        //right
+        if(root.right!=null){
+            int rightMin=minDiffInBST(root.right);
+            ans=Math.min(ans,rightMin);
+        }
+
+        return ans;
     }
 }
