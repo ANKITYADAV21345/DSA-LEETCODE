@@ -1,36 +1,73 @@
+//apna college  bfs ache se samajhega isme 
+
 class Solution {
+
     public int orangesRotting(int[][] grid) {
-         if (grid == null || grid.length == 0) return -1;
 
-    int rows = grid.length, cols = grid[0].length;
-    int[][] time = new int[rows][cols];
-    for (int i = 0; i < rows; i++)
-      Arrays.fill(time[i], Integer.MAX_VALUE);
+        int n = grid.length;
+        int m = grid[0].length;
+        int ans = 0;
 
-    for (int i = 0; i < rows; i++)
-      for (int j = 0; j < cols; j++)
-        if (grid[i][j] == 2)
-          dfs(grid, time, i, j, 0);
+        boolean[][] vis = new boolean[n][m];
 
-    int timeRequired = 0;
-    for (int i = 0; i < rows; i++)
-      for (int j = 0; j < cols; j++)
-        if (grid[i][j] == 1) {
-          if (time[i][j] == Integer.MAX_VALUE) return -1;
-          timeRequired = Math.max(timeRequired, time[i][j]);
+        // queue -> ((i, j), time) sare wroten oranges store kare 
+        Queue<int[]> queue = new LinkedList<>();
+
+        // pushing all sources in queue
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (grid[i][j] == 2) {
+                    queue.add(new int[]{i, j, 0});
+                    vis[i][j] = true;
+                }
+            }
         }
 
-    return timeRequired;
-  }
+        // bfs
+        while (queue.size() > 0) {
 
-  private void dfs(int[][] grid, int[][] time, int i, int j, int currentTime) {
-    if (i < 0 || i >= grid.length || j < 0 || j >= grid[0].length
-        || grid[i][j] == 0 || currentTime >= time[i][j]) return;
+            int[] front = queue.poll();
 
-    time[i][j] = currentTime;
-    dfs(grid, time, i - 1, j, currentTime + 1);
-    dfs(grid, time, i + 1, j, currentTime + 1);
-    dfs(grid, time, i, j - 1, currentTime + 1);
-    dfs(grid, time, i, j + 1, currentTime + 1);
+            int i = front[0];
+            int j = front[1];
+            int time = front[2];
+
+            ans = Math.max(ans, time);
+
+            // top(i-1,j)
+            if (i - 1 >= 0 && !vis[i - 1][j] && grid[i - 1][j] == 1) {
+                queue.add(new int[]{i - 1, j, time + 1});
+                vis[i - 1][j] = true;
+            }
+
+            // right
+            if (j + 1 < m && !vis[i][j + 1] && grid[i][j + 1] == 1) {
+                queue.add(new int[]{i, j + 1, time + 1});
+                vis[i][j + 1] = true;
+            }
+
+            // bottom
+            if (i + 1 < n && !vis[i + 1][j] && grid[i + 1][j] == 1) {
+                queue.add(new int[]{i + 1, j, time + 1});
+                vis[i + 1][j] = true;
+            }
+
+            // left
+            if (j - 1 >= 0 && !vis[i][j - 1] && grid[i][j - 1] == 1) {
+                queue.add(new int[]{i, j - 1, time + 1});
+                vis[i][j - 1] = true;
+            }
+        }
+
+        // check for fresh orange
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (grid[i][j] == 1 && !vis[i][j]) {
+                    return -1;
+                }
+            }
+        }
+
+        return ans;
     }
 }
