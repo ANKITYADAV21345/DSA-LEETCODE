@@ -13,34 +13,22 @@
  *     }
  * }
  */
+
+
+
+ //apna college
 class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> ans=new ArrayList<>();
 
-    public TreeNode insert(TreeNode root,int val){
+        //base case 
         if(root==null){
-            return new TreeNode(val);
+            return ans;
         }
-        if(val<root.val){
-            root.left=insert(root.left,val);
-        }
-        else{
-            root.right=insert(root.right,val);
-        }
-        return root;
-    }
 
-    public void inorderHelper(TreeNode root,ArrayList <Integer> result){
-        if(root==null) return;
-
-        inorderHelper(root.left,result);
-        inorderHelper(root.right,result);
-        result.add(root.val);
-    }   
-
-
-
-    public ArrayList <Integer> postorderTraversal(TreeNode root){
-        ArrayList <Integer> result = new ArrayList<>();
-        inorderHelper(root,result);
-        return result;
+        ans.addAll(postorderTraversal(root.left));
+        ans.addAll(postorderTraversal(root.right));
+        ans.add(root.val);
+        return ans;
     }
 }
