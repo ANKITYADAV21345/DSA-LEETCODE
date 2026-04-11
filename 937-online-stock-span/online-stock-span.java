@@ -1,29 +1,40 @@
-//code bix
+// apna college
+import java.util.*;
+
 class StockSpanner {
-    Stack<Node> st;
+
+    Stack<Integer> stack;   // store indices
+    ArrayList<Integer> prices; // store all prices
+
     public StockSpanner() {
-        st=new Stack<>();
+        stack = new Stack<>();
+        prices = new ArrayList<>();
     }
     
     public int next(int price) {
-       int count=0;
-       while(!st.isEmpty() && st.peek().val<=price){
-        count+=st.peek().del;
-        st.pop();
-       }
-       count++;
-       st.push(new Node(price,count));
-       return count; 
-    }
+        // current index
+        int i = prices.size();
+        prices.add(price);
 
-    static class Node{
-        int val;
-        int del;
-
-        public Node(int val,int del){
-            this.val=val;
-            this.del=del;
+        // pop jab tak chhote ya equal elements milte hain
+        while (!stack.isEmpty() && prices.get(stack.peek()) <= price) {
+            stack.pop();
         }
+
+        int span;
+
+        // agar stack empty → sab chhote the
+        if (stack.isEmpty()) {
+            span = i + 1;
+        } else {
+            // nearest greater element ka index
+            span = i - stack.peek();
+        }
+
+        // current index push karo
+        stack.push(i);
+
+        return span;
     }
 }
 
