@@ -1,31 +1,35 @@
+//apna college
 class Solution {
     public int canCompleteCircuit(int[] gas, int[] cost) {
-    int totalGas = 0, totalCost = 0;
+        int totalGas=0;
+        int totalCost=0;
 
-    // Calculate total gas and total cost
-    for (int i = 0; i < gas.length; i++) {
-      totalGas += gas[i];
-      totalCost += cost[i];
-    }
+        for(int i=0;i<gas.length;i++){
+            totalGas=totalGas+gas[i];
+        }
 
-    // If total gas is less than total cost, return -1
-    if (totalGas < totalCost) {
-      return -1;
-    }
+        for(int i=0;i<cost.length;i++){
+            totalCost=totalCost+cost[i];
+        }
 
-    int currentGas = 0, startIndex = 0;
-    // Iterate through the gas stations
-    for (int i = 0; i < gas.length; i++) {
-      currentGas += gas[i] - cost[i];
+        if(totalGas<totalCost){
+            return -1;
+        }
 
-      // If current gas is negative, reset start index and current gas
-      if (currentGas < 0) {
-        startIndex = i + 1;
-        currentGas = 0;
-      }
-    }
+        //unique solution always exist
+        int start=0;
+        int curGas=0;
 
-    // Return the starting index if a valid circuit exists
-    return startIndex;
+        for(int i=0;i<gas.length;i++){
+            curGas=curGas+(gas[i]-cost[i]);
+            if(curGas<0){
+                start=i+1;
+                curGas=0;
+            }
+        }
+
+        return start;
+
+
     }
 }
