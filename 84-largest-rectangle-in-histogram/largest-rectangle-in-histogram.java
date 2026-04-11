@@ -1,53 +1,55 @@
-//nsr=next smaller right
-//nsl=next smaller left
+//apna college notes
 
-
-//apna college 
 class Solution {
     public int largestRectangleArea(int[] heights) {
-       int maxArea=0;
-       int nsr[] =new int[heights.length];
-       int nsl[]=new int[heights.length];
 
-       //next smaller right
-       Stack<Integer> s=new Stack<>();
+        int maxArea = 0;
+        int n = heights.length;
 
-       for(int i=heights.length-1;i>=0;i--){
-        while(!s.isEmpty() && heights[s.peek()]>=heights[i]){
-            s.pop();
-        }
-        if(s.isEmpty()){
-            nsr[i]=heights.length;
-        }
-        else{
-            nsr[i]=s.peek();
-        }
-        s.push(i);
-       }
+        int[] nsr = new int[n];
+        int[] nsl = new int[n];
 
+        // next smaller right
+        Stack<Integer> stack = new Stack<>();
+        for (int i = n - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && heights[stack.peek()] >= heights[i]) {
+                stack.pop();
+            }
 
-       //next smaller left
-       s=new Stack<>();
+            if (stack.isEmpty()) {
+                nsr[i] = n;
+            } else {
+                nsr[i] = stack.peek();
+            }
 
-       for(int i=0;i<heights.length;i++){
-        while(!s.isEmpty() && heights[s.peek()]>=heights[i]){
-            s.pop();
+            stack.push(i);
         }
-        if(s.isEmpty()){
-            nsl[i]=-1;
-        }
-        else{
-            nsl[i]=s.peek();
-        }
-        s.push(i);
-       }
 
-       for(int i=0;i<heights.length;i++){
-        int height=heights[i];
-        int width=nsr[i]-nsl[i]-1;
-        int currArea=height*width;
-        maxArea=Math.max(currArea,maxArea);
-       }
-       return maxArea;
+        // next smaller left
+        stack = new Stack<>(); 
+        for (int i = 0; i < n; i++) {
+            while (!stack.isEmpty() && heights[stack.peek()] >= heights[i]) {
+                stack.pop();
+            }
+
+            if (stack.isEmpty()) {
+                nsl[i] = -1;
+            } else {
+                nsl[i] = stack.peek();
+            }
+
+            stack.push(i);
+        }
+
+        // current area
+        for (int i = 0; i < n; i++) {
+            int height = heights[i]; 
+            int width = nsr[i] - nsl[i] - 1;
+            int curArea = height * width;
+
+            maxArea = Math.max(curArea, maxArea);
+        }
+
+        return maxArea;
     }
 }
