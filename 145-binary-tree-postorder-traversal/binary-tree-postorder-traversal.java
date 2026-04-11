@@ -15,20 +15,21 @@
  */
 
 
-
  //apna college
 class Solution {
     public List<Integer> postorderTraversal(TreeNode root) {
         List<Integer> ans=new ArrayList<>();
+        postOrder(root,ans);
+        return ans;
+    }
 
-        //base case 
+    public static void postOrder(TreeNode root,List<Integer> ans){
         if(root==null){
-            return ans;
+            return;
         }
 
-        ans.addAll(postorderTraversal(root.left));
-        ans.addAll(postorderTraversal(root.right));
+        postOrder(root.left,ans);
+        postOrder(root.right,ans);
         ans.add(root.val);
-        return ans;
     }
 }
