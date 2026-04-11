@@ -15,42 +15,42 @@
  */
 
 
- //keshav tyagi[bits mesra]
+
+//apna college
 class Solution {
+
     public int maxLevelSum(TreeNode root) {
-        if(root==null){
-            return 0;
-        }
 
-        Queue<TreeNode> queue=new LinkedList<TreeNode>();
-        queue.add(root);
-        int maxLevelSum=Integer.MIN_VALUE;
-        int ans=0;
-        int curLevel=0;
+        ArrayList<Integer> levelSum = new ArrayList<>();
+        levelOrder(root, 0, levelSum);
 
-        while(!queue.isEmpty()){
-            int levelSize=queue.size();
-            curLevel++;
-            int curSum=0;
-            for(int i=0;i<levelSize;i++){
-                TreeNode node =queue.poll();
+        int maxSum = Integer.MIN_VALUE; 
+        int ansLevel = 0;
 
-                curSum=curSum+node.val;
-
-                if(node.left!=null){
-                    queue.add(node.left);
-                }
-
-                if(node.right!=null){
-                    queue.add(node.right);
-                }
-            }
-
-            if(maxLevelSum<curSum){
-                maxLevelSum=curSum;
-                ans=curLevel;
+        for (int i = 0; i < levelSum.size(); i++) {
+            if (levelSum.get(i) > maxSum) {
+                maxSum = levelSum.get(i);
+                ansLevel = i;
             }
         }
-        return ans;
+
+        return ansLevel + 1;
+    }
+
+    public void levelOrder(TreeNode root, int level, ArrayList<Integer> levelSum) {
+
+        if (root == null) {
+            return;
+        }
+
+        // new level
+        if (level == levelSum.size()) {
+            levelSum.add(root.val);
+        } else {//existing level me add kar rahe hai
+            levelSum.set(level, levelSum.get(level) + root.val);
+        }
+
+        levelOrder(root.left, level + 1, levelSum);
+        levelOrder(root.right, level + 1, levelSum);
     }
 }
