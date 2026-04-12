@@ -19,17 +19,28 @@
 //apna college
 class Solution {
 
-    static int preIdx = 0;
+    int preIdx = 0;
 
-    public TreeNode helper(int[] preorder, int[] inorder, int left, int right) {
-        if (left > right) {
+    public int search(int[] inorder, int left, int right, int val){
+        for(int i = left; i <= right; i++){
+            if(inorder[i] == val){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public TreeNode helper(int[] preorder, int[] inorder, int left, int right){
+
+        if(left > right){
             return null;
         }
 
-        TreeNode root = new TreeNode(preorder[preIdx]);
+        int rootVal = preorder[preIdx];
+        TreeNode root = new TreeNode(rootVal);
         preIdx++;
 
-        int inIdx = search(inorder, left, right, root.val);
+        int inIdx = search(inorder, left, right, rootVal);
 
         root.left = helper(preorder, inorder, left, inIdx - 1);
         root.right = helper(preorder, inorder, inIdx + 1, right);
@@ -37,17 +48,7 @@ class Solution {
         return root;
     }
 
-    public int search(int[] inorder, int left, int right, int key) {
-        for (int i = left; i <= right; i++) {
-            if (inorder[i] == key) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        preIdx = 0; // reset important hai
         return helper(preorder, inorder, 0, inorder.length - 1);
     }
 }
