@@ -1,31 +1,43 @@
-//binod suman acadmy
-class MedianFinder {
-
-    PriorityQueue<Integer> maxHeap;
-    PriorityQueue<Integer> minHeap;
+//codestorywithmik
+//Approach-1 (O(n^2) - TLE
+//T.C : O(n^2)
+//S.C : O(50001) ~= O(1)
+public class MedianFinder {
+    private int[] vec;
+    private int i;
 
     public MedianFinder() {
-        minHeap=new PriorityQueue<>();
-        maxHeap=new PriorityQueue<>(Collections.reverseOrder());
+        vec = new int[5 * 10000 + 1];
+        i = 0;
     }
-    
+
     public void addNum(int num) {
-        maxHeap.add(num);
-        minHeap.add(maxHeap.poll());
-        if(minHeap.size()>maxHeap.size()){
-            maxHeap.add(minHeap.poll());
+        if (i == 0) {
+            vec[i++] = num;
+            return;
         }
+        int j = i - 1;
+        while (j >= 0 && vec[j] > num) {
+            vec[j + 1] = vec[j];
+            j--;
+        }
+        vec[j + 1] = num;
+        i++;
     }
-    
+
     public double findMedian() {
-        
-        if(maxHeap.size()==minHeap.size()){
-            return (maxHeap.peek()+minHeap.peek())/2.0;  
-        }else{
-            return maxHeap.peek();
+        int n = i;
+        if (n % 2 == 0) {
+            int l = n / 2 - 1;
+            int r = n / 2;
+            return (double) (vec[l] + vec[r]) / 2;
         }
+
+        return vec[n / 2];
     }
 }
+
+
 
 /**
  * Your MedianFinder object will be instantiated and called as such:
