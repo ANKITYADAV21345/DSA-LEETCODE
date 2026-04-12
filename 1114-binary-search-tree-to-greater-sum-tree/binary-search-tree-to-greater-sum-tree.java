@@ -15,17 +15,27 @@
  */
 
 
-//ayushi sharma
+ //APNA COLLEGE NOTES
 class Solution {
-    private int sum = 0;
-    
-    public TreeNode bstToGst(TreeNode root) {  
-        if (root != null) {
-            bstToGst(root.right); 
-            root.val += sum;
-            sum = root.val; 
-            bstToGst(root.left);
-        }
+    int sum=0;
+    public TreeNode bstToGst(TreeNode root) {
+        helper(root);
         return root;
+    }
+
+    public void helper(TreeNode root){
+        if(root==null){
+            return;
+        }
+
+        //right subtree
+        helper(root.right);
+
+        //sum
+        sum=sum+root.val;
+        root.val=sum;
+
+        //left subtree
+        helper(root.left);
     }
 }
