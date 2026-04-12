@@ -1,33 +1,37 @@
-public class Solution {
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
 
-  boolean isValidBST(TreeNode root) {  // Renamed to isValidBST
 
-    List<Integer> inOrderList = new LinkedList<>();
-
-    // Populate the list
-    helper(root, inOrderList);
-
-    boolean isBST = true;
-    int prev = inOrderList.get(0);
-    for (int i = 1; i < inOrderList.size(); i++) {
-
-      // Check if new element is smaller than previous element
-      // or if the element is duplicate
-      if (inOrderList.get(i) <= prev)
-        isBST = false;
-
-      prev = inOrderList.get(i);
+ //apna college
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        return helper(root,null,null);
     }
 
-    return isBST;
-  }
+    public boolean helper(TreeNode root,TreeNode min,TreeNode max){
+        if(root==null){
+            return true;
+        }
 
-  void helper(TreeNode treeNode, List<Integer> inOrderList) {
-    if (treeNode == null)
-      return;
-
-    helper(treeNode.left, inOrderList);
-    inOrderList.add(treeNode.val);
-    helper(treeNode.right, inOrderList);
-  }
+        if(min!=null && root.val<=min.val){
+            return false;
+        }
+        if(max!=null && root.val>=max.val){
+            return false;
+        }
+        return helper(root.left,min,root) && helper(root.right,root,max);
+    }
 }
