@@ -1,39 +1,47 @@
-//shash code 
+//codestorywithmik
+//Approach-2 (Using heap)
+//T.C : O(n*log(k))
+//S.C : O(k)
 class Solution {
     public int[] smallestRange(List<List<Integer>> nums) {
+        int k = nums.size();
         
-        PriorityQueue<int[]> pq=new PriorityQueue<>(new Comparator<int[]>(){
-            public int compare(int a[],int b[]){
-                return a[0]-b[0];//IN ORDER
-            }
-        });
-
-        int k=nums.size();
-        int max=Integer.MIN_VALUE;
-
-        for(int i=0;i<k;i++){
-            int minVal=nums.get(i).get(0);;
-            pq.offer(new int[]{minVal,i,0});
-            max=Math.max(max,minVal);
+        // Priority Queue to store {element, listIdx, elementIdx}
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);
+        
+        int maxEl = Integer.MIN_VALUE;
+        
+        // Initialize the priority queue with the first element of each list
+        for (int i = 0; i < k; i++) {
+            pq.offer(new int[]{nums.get(i).get(0), i, 0});
+            maxEl = Math.max(maxEl, nums.get(i).get(0));
         }
-
-
-        int [] minRange={0,Integer.MAX_VALUE};
-
-
-        while(true){
-            int top[]=pq.poll();
-            int minElement=top[0],listIndex=top[1],elementIndex=top[2];
-            if(max-minElement<minRange[1]-minRange[0]){
-                minRange[0]=minElement;
-                minRange[1]=max;
+        
+        // Initialize result range with large numbers
+        int[] resultRange = { -1000000, 1000000 };
+        
+        while (!pq.isEmpty()) {
+            int[] curr = pq.poll();
+            int minEl = curr[0];
+            int listIdx = curr[1];
+            int idx = curr[2];
+            
+            // Update the result range if the current range is smaller
+            if (maxEl - minEl < resultRange[1] - resultRange[0]) {
+                resultRange[0] = minEl;
+                resultRange[1] = maxEl;
             }
-            if(elementIndex==nums.get(listIndex).size()-1) break;
-            int next=nums.get(listIndex).get(elementIndex+1);
-            max=Math.max(max,next);
-            pq.offer(new int[]{next,listIndex,elementIndex+1});
-
+            
+            // Try to move to the next element in the list that contained the minimum element
+            if (idx + 1 < nums.get(listIdx).size()) {
+                int nextElement = nums.get(listIdx).get(idx + 1);
+                pq.offer(new int[]{nextElement, listIdx, idx + 1});
+                maxEl = Math.max(maxEl, nextElement);  // Update maxEl with the new element
+            } else {
+                break;  // If one list is exhausted, we can't continue forming valid ranges
+            }
         }
-        return minRange;
+        
+        return resultRange;
     }
 }
