@@ -24,25 +24,25 @@ class Solution {
                 pq2.add(costs[j--]);
             }
 
-            int a;
+            int minfrompq1;
             if (pq1.size() > 0) {
-                a = pq1.peek();
+                minfrompq1 = pq1.peek();
             } else {
-                a = Integer.MAX_VALUE;
+                minfrompq1 = Integer.MAX_VALUE;
             }
 
-            int b;
+            int minfrompq2;
             if (pq2.size() > 0) {
-                b = pq2.peek();
+                minfrompq2 = pq2.peek();
             } else {
-                b = Integer.MAX_VALUE;
+                minfrompq2 = Integer.MAX_VALUE;
             }
 
-            if (a <= b) {
-                ans =ans + a;
+            if (minfrompq1 <= minfrompq2) {
+                ans =ans + minfrompq1;
                 pq1.poll();
             } else {
-                ans += b;
+                ans = ans + minfrompq2;
                 pq2.poll();
             }
 
