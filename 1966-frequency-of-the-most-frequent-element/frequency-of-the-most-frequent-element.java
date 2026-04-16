@@ -1,5 +1,5 @@
 //codestorywithmik
-//Approach-2 (Using sliding window)
+//Approach-3 (Improved sliding window)
 //T.C : O(nlogn)
 //S.C : O(1)
 public class Solution {
@@ -18,7 +18,7 @@ public class Solution {
             long target = nums[j];
             currSum += nums[j];
             
-            while ((j - i + 1) * target - currSum > k) {
+            if ((j - i + 1) * target - currSum > k) {
                 currSum -= nums[i];
                 i++;
             }
