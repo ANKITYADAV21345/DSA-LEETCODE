@@ -1,35 +1,42 @@
-//codestorywithmik aproach1
+//codestorywithmik aproach 2
 
 public class Solution {
 
     public static int[] kthSmallestPrimeFraction(int[] arr, int k) {
 
-        PriorityQueue<double[]> pq = new PriorityQueue<>(
-            (a, b) -> Double.compare(b[0], a[0]) // max-heap
-        ); // {fraction, arr[i], arr[j]}
-
         int n = arr.length;
 
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = i + 1; j < n; j++) {
+        // min-heap {fraction, i, j}
+        PriorityQueue<double[]> pq = new PriorityQueue<>(
+            (a, b) -> Double.compare(a[0], b[0])
+        );
 
-                double div = (double) arr[i] / arr[j];
-
-                pq.add(new double[]{div, (double) arr[i], (double) arr[j]});
-
-                if (pq.size() > k) {
-                    pq.poll();
-                }
-            }
+        for (int i = 0; i < n; i++) {
+            // denominator = arr[n-1] (largest)
+            pq.add(new double[]{(double) arr[i] / arr[n - 1], (double) i, (double) (n - 1)});
         }
 
-        double[] vec = pq.peek(); // {fraction, arr[i], arr[j]}
+        int smallest = 1; // first smallest
 
-        int[] result = new int[2];
-        result[0] = (int) vec[1];
-        result[1] = (int) vec[2];
+        while (smallest < k) {
 
-        return result;
+            double[] vec = pq.peek();
+            pq.poll();
+
+            int i = (int) vec[1]; // index
+            int j = (int) vec[2] - 1; // index
+
+            pq.add(new double[]{(double) arr[i] / arr[j], (double) i, (double) j});
+
+            smallest++;
+        }
+
+        double[] vec = pq.peek();
+
+        int i = (int) vec[1];
+        int j = (int) vec[2];
+
+        return new int[]{arr[i], arr[j]};
     }
 
     public static void main(String[] args) {
