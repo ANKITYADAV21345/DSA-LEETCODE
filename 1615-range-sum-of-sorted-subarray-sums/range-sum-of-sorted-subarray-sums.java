@@ -1,5 +1,5 @@
 //CODESTORYWITHMIK
-//APROACH 1
+//APROACH 2
 
 public class Solution {
 
@@ -7,23 +7,37 @@ public class Solution {
 
     public static int rangeSum(int[] nums, int n, int left, int right) {
 
-        List<Integer> temp = new ArrayList<>();
+        // priority_queue<P, vector<P>, greater<P>> pq;
+        PriorityQueue<int[]> pq = new PriorityQueue<>(
+            (a, b) -> a[0] - b[0]   // min heap based on sum
+        );
 
         for (int i = 0; i < n; i++) {
-            int sum = 0;
-
-            for (int j = i; j < n; j++) {
-                sum += nums[j];
-                temp.add(sum);
-            }
+            pq.add(new int[]{nums[i], i});
         }
-
-        Collections.sort(temp);
 
         int result = 0;
 
-        for (int i = left - 1; i <= right - 1; i++) {
-            result = (result + temp.get(i)) % M;
+        for (int counter = 1; counter <= right; counter++) {
+
+            int[] p = pq.poll();
+
+            int sum = p[0];
+            int idx = p[1];
+
+            if (counter >= left) {
+                result = (result + sum) % M;
+            }
+
+            int new_idx = idx + 1;
+
+            if (new_idx < n) {
+                int[] new_pair = new int[2];
+                new_pair[0] = sum + nums[new_idx];
+                new_pair[1] = new_idx;
+
+                pq.add(new_pair);
+            }
         }
 
         return result;
