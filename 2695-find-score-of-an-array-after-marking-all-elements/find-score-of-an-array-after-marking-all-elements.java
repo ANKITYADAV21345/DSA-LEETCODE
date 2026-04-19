@@ -1,5 +1,7 @@
 //codestorywithmik
-//aproach 1
+//aproach 2
+
+import java.util.*;
 
 public class Solution {
 
@@ -7,40 +9,41 @@ public class Solution {
 
         int n = nums.length;
 
-        // vector<pair<int,int>> vec;
-        int[][] vec = new int[n][2];
-
-        for (int i = 0; i < n; i++) {
-            vec[i][0] = nums[i];
-            vec[i][1] = i;
-        }
-
-        // sort(begin(vec), end(vec));
-        Arrays.sort(vec, (a, b) -> {
-            if (a[0] == b[0]) return a[1] - b[1];
-            return a[0] - b[0];
-        });
-
-        long score = 0;
-
         // vector<bool> visited(n, false);
         boolean[] visited = new boolean[n];
 
+        // priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>>
+        PriorityQueue<int[]> pq = new PriorityQueue<>(
+            (a, b) -> {
+                if (a[0] == b[0]) return a[1] - b[1];
+                return a[0] - b[0];
+            }
+        );
+
         for (int i = 0; i < n; i++) {
+            pq.add(new int[]{nums[i], i});
+        }
 
-            int element = vec[i][0];
-            int idx = vec[i][1];
+        long score = 0;
 
-            if (visited[idx] == false) {
+        while (!pq.isEmpty()) {
+
+            int[] temp = pq.poll();
+
+            int element = temp[0];
+            int idx = temp[1];
+
+            if (!visited[idx]) {
 
                 visited[idx] = true;
-                score += element;   
+                score += element;
+            
 
-                if (idx - 1 >= 0 && visited[idx - 1] == false) {
+                if (idx - 1 >= 0 && !visited[idx - 1]) {
                     visited[idx - 1] = true;
                 }
 
-                if (idx + 1 < n && visited[idx + 1] == false) {
+                if (idx + 1 < n && !visited[idx + 1]) {
                     visited[idx + 1] = true;
                 }
             }
