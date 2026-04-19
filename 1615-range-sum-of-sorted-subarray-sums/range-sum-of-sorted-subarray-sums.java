@@ -1,5 +1,5 @@
-//codestorywithmik
-//bruteforce
+//CODESTORYWITHMIK
+//APROACH 1
 
 public class Solution {
 
@@ -7,10 +7,11 @@ public class Solution {
 
     public static int rangeSum(int[] nums, int n, int left, int right) {
 
-        ArrayList<Integer> temp = new ArrayList<>();
+        List<Integer> temp = new ArrayList<>();
 
         for (int i = 0; i < n; i++) {
             int sum = 0;
+
             for (int j = i; j < n; j++) {
                 sum += nums[j];
                 temp.add(sum);
@@ -29,10 +30,13 @@ public class Solution {
     }
 
     public static void main(String[] args) {
+
         int[] nums = {1, 2, 3, 4};
         int n = nums.length;
         int left = 1, right = 5;
 
-        System.out.println(rangeSum(nums, n, left, right));
+        int ans = rangeSum(nums, n, left, right);
+
+        System.out.println("Result: " + ans);
     }
 }
