@@ -1,45 +1,41 @@
-//apna college article 
-//aproach 2
+//apna college optimised
 import java.util.*;
-
-
 class Solution {
    public List<List<Integer>> threeSum(int[] nums) {
-       List<List<Integer>> ans = new ArrayList<>();
+       List<List<Integer>> result = new ArrayList<>();
        int n = nums.length;
        Arrays.sort(nums); // Step 1: Sort the array
-
-
-       Set<List<Integer>> set = new HashSet<>(); // Step 2: Use a Set to store unique triplets
-
-
-       // Step 3: Loop through each number
        for (int i = 0; i < n - 2; i++) {
-           int low = i + 1;
-           int high = n - 1;
-           int target = -nums[i]; // Step 4: Target two-sum = -nums[i]
+           // Step 2: Skip duplicates for the first element
+           if (i > 0 && nums[i] == nums[i - 1]) continue;
+           int target = -nums[i];
+           int left = i + 1, right = n - 1;
+           // Step 3: Two-pointer approach
+           while (left < right) {
+               int sum = nums[left] + nums[right];
 
 
-           // Step 5: Two-pointer search
-           while (low < high) {
-               int sum = nums[low] + nums[high];
                if (sum == target) {
-                   // Found a triplet
-                   set.add(Arrays.asList(nums[i], nums[low], nums[high]));
-                   low++;
-                   high--;
+                   result.add(Arrays.asList(nums[i], nums[left], nums[right]));
+
+
+                   // Step 4: Skip duplicate values
+                   while (left < right && nums[left] == nums[left + 1]) left++;
+                   while (left < right && nums[right] == nums[right - 1]) right--;
+
+
+                   left++;
+                   right--;
                } else if (sum < target) {
-                   low++; // Need a bigger sum
+                   left++;
                } else {
-                   high--; // Need a smaller sum
+                   right--;
                }
            }
        }
 
 
-       // Step 6: Convert set to list
-       ans.addAll(set);
-       return ans;
+       return result;
    }
 
 
