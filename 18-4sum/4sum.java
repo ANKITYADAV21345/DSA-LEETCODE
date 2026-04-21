@@ -1,46 +1,61 @@
+//APNA COLLEGE ARTICLE APROACH2
+
 import java.util.*;
 
-public class Solution {
-    public static List<List<Integer>> fourSum(int[] nums, int target) {
-        List<List<Integer>> ans = new ArrayList<>();
-        int n = nums.length;
 
-        Arrays.sort(nums); // Sort the array
+class Solution {
+   public List<List<Integer>> fourSum(int[] nums, int target) {
+       Set<List<Integer>> uniqueQuadruplets = new HashSet<>(); // To store unique quadruplets
+       List<List<Integer>> result = new ArrayList<>();
+       int n = nums.length;
 
-        for (int i = 0; i < n; i++) {
-            if (i > 0 && nums[i] == nums[i - 1]) continue; // Skip duplicates
 
-            for (int j = i + 1; j < n; j++) {
-                if (j > i + 1 && nums[j] == nums[j - 1]) continue; // Skip duplicates
+       Arrays.sort(nums); // Sort the array
 
-                int p = j + 1, q = n - 1;
 
-                while (p < q) {
-                    long sum = (long) nums[i] + (long) nums[j] + (long) nums[p] + (long) nums[q];
+       // Fix first and second elements
+       for (int i = 0; i < n - 3; i++) {
+           for (int j = i + 1; j < n - 2; j++) {
+               long val = (long)target - nums[i] - nums[j]; // Avoid overflow
+               int low = j + 1, high = n - 1;
 
-                    if (sum < target) {
-                        p++;
-                    } else if (sum > target) {
-                        q--;
-                    } else { // sum == target
-                        ans.add(Arrays.asList(nums[i], nums[j], nums[p], nums[q]));
-                        p++;
-                        q--;
 
-                        // Skip duplicates
-                        while (p < q && nums[p] == nums[p - 1]) p++;
-                        while (p < q && nums[q] == nums[q + 1]) q--;
-                    }
-                }
-            }
-        }
-        return ans;
-    }
+               // Two-pointer approach
+               while (low < high) {
+                   int sum = nums[low] + nums[high];
 
-    public static void main(String[] args) {
-        int[] nums = {1, 0, -1, 0, -2, 2};
-        int target = 0;
-        List<List<Integer>> result = fourSum(nums, target);
-        System.out.println(result);
-    }
+
+                   if (sum == val) {
+                       uniqueQuadruplets.add(Arrays.asList(nums[i], nums[j], nums[low], nums[high]));
+                       low++;
+                       high--;
+                   }
+                   else if (sum < val) {
+                       low++; // Need larger sum
+                   }
+                   else {
+                       high--; // Need smaller sum
+                   }
+               }
+           }
+       }
+
+
+       result.addAll(uniqueQuadruplets); // Convert set to list
+       return result;
+   }
+
+
+   // Main method
+   public static void main(String[] args) {
+       Solution sol = new Solution();
+       int[] nums = {1, 0, -1, 0, -2, 2};
+       int target = 0;
+       List<List<Integer>> res = sol.fourSum(nums, target);
+
+
+       for (List<Integer> quad : res) {
+           System.out.println(quad);
+       }
+   }
 }
