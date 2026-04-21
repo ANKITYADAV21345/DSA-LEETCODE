@@ -8,25 +8,48 @@
  *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
- 
-class Solution {
+
+
+ //CODESTORYWITHMIK
+ //BRUTEFORCE
+// Approach-1 (2 Pass)
+// T.C : O(n)
+// S.C : O(1)
+public class Solution {
+    public int lengthLinkedList(ListNode head) {
+        int l = 0;
+
+        while (head != null) {
+            l++;
+            head = head.next;
+        }
+        return l;
+    }
+
     public ListNode removeNthFromEnd(ListNode head, int n) {
-        ListNode slow=head;
-        ListNode fast=head;
-        while(n-->0){
-            //fast ko n step age badayege 
-            fast=fast.next;
+        int length = lengthLinkedList(head);
+
+        if (length == n) { // Length node from end means the first node
+            ListNode temp = head.next;
+            head = null;
+            return temp;
         }
 
-        if(fast==null){
-            return head.next;
+        ListNode temp = head;
+        ListNode prev = null;
+        int travel = length - n;
+
+        while (travel-- > 0) {
+            prev = temp;
+            temp = temp.next;
         }
 
-        while(fast.next!=null){
-            slow=slow.next;
-            fast=fast.next;
+        if (prev != null) {
+            prev.next = temp.next;
         }
-        slow.next=slow.next.next;
+
+        temp = null;
+
         return head;
     }
 }
