@@ -1,25 +1,46 @@
-//apna college article bruteforce
+//apna college article best aproach
 class Solution {
-   public List<List<String>> groupAnagrams(String[] arr) {
-       List<List<String>> ans = new ArrayList<>();
-       int n = arr.length;
+   public String getHash(String s) {
+       StringBuilder hash = new StringBuilder();
+       int[] freq = new int[26];
 
 
-       HashMap<String, List<String>> map = new HashMap<>();
-       for (int i = 0; i < n; i++) {
-           String str = arr[i];
-           char[] chars = arr[i].toCharArray();
-           Arrays.sort(chars);
-           String sortedStr = new String(chars);
-           if (!map.containsKey(sortedStr))
-           {
-            map.put(sortedStr, new ArrayList<>());
+       for (char ch : s.toCharArray()) {
+           freq[ch - 'a']++;
+       }
+
+
+       for (int i = 0; i < 26; i++) {
+           if (freq[i] != 0) {
+               hash.append(freq[i]);
            }
-           map.get(sortedStr).add(str);
+           hash.append("$");
        }
-       for (List<String> group : map.values()) {
-           ans.add(group);
+
+
+       return hash.toString();
+   }
+
+
+   public List<List<String>> groupAnagrams(String[] strs) {
+       List<List<String>> res = new ArrayList<>();
+       HashMap<String, List<String>> mp = new HashMap<>();
+
+
+       for (int i = 0; i < strs.length; i++) {
+           String key = getHash(strs[i]);
+           if (!mp.containsKey(key)) {
+               mp.put(key, new ArrayList<>());
+           }
+           mp.get(key).add(strs[i]);
        }
-       return ans;
+
+
+       for (List<String> group : mp.values()) {
+           res.add(group);
+       }
+
+
+       return res;
    }
 }
