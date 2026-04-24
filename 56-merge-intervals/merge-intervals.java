@@ -1,55 +1,35 @@
-//apna college article 
-//bruteforce
+//apna colege article 
+//optimised
 class Solution {
   public int[][] merge(int[][] intervals) {
-        if (intervals.length <= 1) {
-          return intervals;
-      }
-
-
-
-
-      List<int[]> intervalList = new ArrayList<>(Arrays.asList(intervals));
-      boolean mergedSomething = true; // Flag to check if merging happened
-
-
-
-
-      while (mergedSomething) {
-          mergedSomething = false;
-          List<int[]> tempList = new ArrayList<>();
+      int n = intervals.length;
+    
+      // Sort the intervals based on the start value
+      Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+    
+      // List to store the merged intervals
+      List<int[]> result = new ArrayList<>();
+    
+      // Add the first interval to the result
+      result.add(intervals[0]);
+    
+      // Iterate through the remaining intervals
+      for (int i = 1; i < n; i++) {
+          // Get the last merged interval
+          int[] lastInterval = result.get(result.size() - 1);
         
-          while (!intervalList.isEmpty()) {
-              int[] current = intervalList.remove(0);
-              boolean isMerged = false;
-
-
-
-
-              for (int i = 0; i < intervalList.size(); i++) {
-                  int[] other = intervalList.get(i);
-
-
-
-
-                  // Check if intervals overlap
-                  if (Math.max(current[0], other[0]) <= Math.min(current[1], other[1])) {
-                      // Merge the intervals
-                      current = new int[]{Math.min(current[0], other[0]), Math.max(current[1], other[1])};
-                      intervalList.remove(i); // Remove the merged interval
-                      isMerged = true;
-                      mergedSomething = true;
-                      break; // Restart merging process
-                  }
-              }
-              tempList.add(current);
+          // Check if the current interval overlaps with the last merged interval
+          if (lastInterval[1] >= intervals[i][0] && lastInterval[1] <= intervals[i][1]) {
+              // Merge the intervals by updating the end time of the last merged interval
+              lastInterval[1] = intervals[i][1];
           }
-          intervalList = tempList; // Update list with merged intervals
+          // If no overlap, add the current interval to the result
+          else if (lastInterval[1] < intervals[i][0]) {
+              result.add(intervals[i]);
+          }
       }
-
-
-
-
-      return intervalList.toArray(new int[intervalList.size()][]);
+    
+      // Convert the result list to a 2D array and return
+      return result.toArray(new int[result.size()][]);
   }
 }
