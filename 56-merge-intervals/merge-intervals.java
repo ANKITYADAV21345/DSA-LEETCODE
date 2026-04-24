@@ -1,43 +1,55 @@
-import java.util.Arrays;
-import java.util.Comparator;
-
+//apna college article 
+//bruteforce
 class Solution {
-    public int[][] merge(int[][] intervals) {
-        if (intervals.length == 0) {
-            return new int[0][0];
-        }
+  public int[][] merge(int[][] intervals) {
+        if (intervals.length <= 1) {
+          return intervals;
+      }
 
-        Arrays.sort(intervals, new Comparator<int[]>() {
-            @Override
-            public int compare(int[] a, int[] b) {
-                return Integer.compare(a[0], b[0]);
-            }
-        });
 
-        int[][] merged = new int[intervals.length][2];
-        int index = 0;
-        int[] current = intervals[0];
 
-        for (int i = 1; i < intervals.length; i++) {
-            if (current[1] >= intervals[i][0]) {
-                current[1] = Math.max(current[1], intervals[i][1]);
-            } else {
-                merged[index++] = current;
-                current = intervals[i];
-            }
-        }
-        merged[index++] = current;
 
-        return Arrays.copyOf(merged, index);
-    }
+      List<int[]> intervalList = new ArrayList<>(Arrays.asList(intervals));
+      boolean mergedSomething = true; // Flag to check if merging happened
 
-    public static void main(String[] args) {
-        Solution sol = new Solution();
-        int[][] intervals = {{1, 3}, {2, 6}, {8, 10}, {15, 18}};
-        int[][] result = sol.merge(intervals);
 
-        for (int[] interval : result) {
-            System.out.println(Arrays.toString(interval));
-        }
-    }
+
+
+      while (mergedSomething) {
+          mergedSomething = false;
+          List<int[]> tempList = new ArrayList<>();
+        
+          while (!intervalList.isEmpty()) {
+              int[] current = intervalList.remove(0);
+              boolean isMerged = false;
+
+
+
+
+              for (int i = 0; i < intervalList.size(); i++) {
+                  int[] other = intervalList.get(i);
+
+
+
+
+                  // Check if intervals overlap
+                  if (Math.max(current[0], other[0]) <= Math.min(current[1], other[1])) {
+                      // Merge the intervals
+                      current = new int[]{Math.min(current[0], other[0]), Math.max(current[1], other[1])};
+                      intervalList.remove(i); // Remove the merged interval
+                      isMerged = true;
+                      mergedSomething = true;
+                      break; // Restart merging process
+                  }
+              }
+              tempList.add(current);
+          }
+          intervalList = tempList; // Update list with merged intervals
+      }
+
+
+
+
+      return intervalList.toArray(new int[intervalList.size()][]);
+  }
 }
