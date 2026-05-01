@@ -1,57 +1,45 @@
-//codestorywithmik
-//bruteforce
-import java.util.*;
+//code storywithmik
+//optimised
 
 public class Solution {
 
     public static int[][] insert(int[][] intervals, int[] newInterval) {
-
-        List<int[]> list = new ArrayList<>();
-
-        for (int[] interval : intervals) {
-            list.add(interval);
-        }
-
         int i = 0;
+        List<int[]> result = new ArrayList<>();
+        int n = intervals.length;
 
-        // O(n^2) because insert/remove in ArrayList can shift elements
-        while (i < list.size()) { // O(n)
-
-            // Current interval completely before newInterval
-            if (list.get(i)[1] < newInterval[0]) {
-                i++;
+        while (i < n) {
+            if (intervals[i][1] < newInterval[0]) {
+                result.add(intervals[i]);
+            } else if (intervals[i][0] > newInterval[1]) {
+                break;
+            } else {
+                // merge kar do
+                newInterval[0] = Math.min(newInterval[0], intervals[i][0]);
+                newInterval[1] = Math.max(newInterval[1], intervals[i][1]);
             }
-
-            // Current interval completely after newInterval
-            else if (list.get(i)[0] > newInterval[1]) {
-                list.add(i, newInterval); // insert at position i
-                return list.toArray(new int[list.size()][]);
-            }
-
-            // Overlapping intervals
-            else {
-                // Merge and remove current interval
-                newInterval[0] = Math.min(newInterval[0], list.get(i)[0]);
-                newInterval[1] = Math.max(newInterval[1], list.get(i)[1]);
-
-                list.remove(i); // erase merged interval
-            }
+            i++;
         }
 
-        // If newInterval goes at the end
-        list.add(newInterval);
+        result.add(newInterval);
 
-        return list.toArray(new int[list.size()][]);
+        while (i < n) {
+            result.add(intervals[i]);
+            i++;
+        }
+
+        // convert list to array
+        int[][] ans = new int[result.size()][2];
+        for (int j = 0; j < result.size(); j++) {
+            ans[j] = result.get(j);
+        }
+
+        return ans;
     }
 
     public static void main(String[] args) {
-
-        int[][] intervals = {
-                {1, 3},
-                {6, 9}
-        };
-
-        int[] newInterval = {2, 5};
+        int[][] intervals = {{1,3},{6,9}};
+        int[] newInterval = {2,5};
 
         int[][] result = insert(intervals, newInterval);
 
