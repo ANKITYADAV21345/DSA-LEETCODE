@@ -1,15 +1,7 @@
 class Solution {
     public String reverseWords(String s) {
-        StringBuilder sb= new StringBuilder();
-
-        String[] words=s.split(" ");
-        for(String word:words){
-            StringBuilder tmp=new StringBuilder(word);
-            tmp.reverse();
-            sb.append(tmp);
-            sb.append(" ");
-
-        }
-        return sb.toString().trim();
+        return Arrays.stream(s.split(" "))     //split ion the bases of space  then wrap the array in a stream
+                .map(word -> new StringBuilder(word).reverse().toString()) //wrap in stringbuilter reverse the string
+                .collect(Collectors.joining(" "));  ///join on the bases of space
     }
 }
