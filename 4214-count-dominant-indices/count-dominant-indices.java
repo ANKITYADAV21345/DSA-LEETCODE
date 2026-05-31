@@ -1,21 +1,22 @@
+//study placement
 class Solution {
     public int dominantIndices(int[] nums) {
-        
-        double avg=0;
-        double sum=0;
-        int count=0;
-
-        for(int i=0;i<=nums.length-2;i++){
-            int n=nums.length-1-i;
-            for(int j=i+1;j<=nums.length-1;j++){
-                sum=sum+nums[j];
-            }
-            avg=sum/n;
-            if(nums[i]>avg){
-                count++;
-            }
-            sum=0;
+        int n = nums.length;
+        int suffix[] = new int[n+1];
+        suffix[n] = 0;
+        for(int i= n-1; i>=0; i--){
+            suffix[i] =  suffix[i+1] + nums[i];
         }
-        return count;
+        int cnt = 0;
+        for(int i=0; i<n; i++){
+            int sum = suffix[i+1];
+            int num = n - i - 1;
+            if(num == 0) continue;
+            int avg = sum / num;
+            if(avg < nums[i]){
+                cnt++;
+            }
+        }
+        return cnt;
     }
 }
