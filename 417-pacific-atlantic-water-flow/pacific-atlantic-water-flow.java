@@ -1,61 +1,68 @@
-//neetcode 150 by destination fang
+//code storywith mik
+//Approach - 1
+/*
+    Do a DFS on every cell and if a cell reaches both (pacific and atlantic), mark them as the result
+    TIme Complexity : (m*n)*(m*n)
+*/
 
-import java.util.*;
-
+//Approach - 2 (Better DFS)
+//T.C : O(m*n)
+//S.C : O(m*n)
 class Solution {
+    // Directions for moving up, down, left, right
+    private final int[][] directions = {{1,0}, {-1,0}, {0,1}, {0,-1}};
+
     public List<List<Integer>> pacificAtlantic(int[][] heights) {
-        if (heights.length == 0 || heights[0].length == 0) {
-            return new ArrayList<>();
-        }
-
-        int row = heights.length;
-        int col = heights[0].length;
-
-        boolean[][] pacificReachable = new boolean[row][col];
-        boolean[][] atlanticReachable = new boolean[row][col];
-
-        for (int i = 0; i < row; i++) {
-            dfs(i, 0, pacificReachable, heights);
-            dfs(i, col - 1, atlanticReachable, heights);
-        }
-
-        for (int i = 0; i < col; i++) {
-            dfs(0, i, pacificReachable, heights);
-            dfs(row - 1, i, atlanticReachable, heights);
-        }
-
         List<List<Integer>> result = new ArrayList<>();
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
-                if (pacificReachable[i][j] && atlanticReachable[i][j]) {
-                    result.add(List.of(i, j));
+        if (heights == null || heights.length == 0 || heights[0].length == 0) {
+            return result;
+        }
+        
+        int m = heights.length;
+        int n = heights[0].length;
+        
+        boolean[][] pacificVisited = new boolean[m][n];
+        boolean[][] atlanticVisited = new boolean[m][n];
+        
+        // Start DFS from pacificVisited border (top row and left column)
+        for (int i = 0; i < m; i++) {
+            dfs(heights, pacificVisited, i, 0, Integer.MIN_VALUE);
+            dfs(heights, atlanticVisited, i, n - 1, Integer.MIN_VALUE);
+        }
+        for (int j = 0; j < n; j++) {
+            dfs(heights, pacificVisited, 0, j, Integer.MIN_VALUE);
+            dfs(heights, atlanticVisited, m - 1, j, Integer.MIN_VALUE);
+        }
+        
+        // Collect cells that can reach both oceans
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (pacificVisited[i][j] && atlanticVisited[i][j]) {
+                    result.add(Arrays.asList(i, j));
                 }
             }
         }
-
+        
         return result;
     }
 
-    private void dfs(int row, int col, boolean[][] reachable, int[][] heights) {
-        int[][] directions = new int[][] { { 0, 1 }, { 1, 0 }, { -1, 0 }, { 0, -1 } };
-
-        reachable[row][col] = true;
-
+    private void dfs(int[][] heights, boolean[][] visited, int i, int j, int prevHeight) {
+        int m = heights.length;
+        int n = heights[0].length;
+        
+        // Out of bounds or already visited or not valid move
+        if (i < 0 || i >= m || j < 0 || j >= n 
+            || visited[i][j] || heights[i][j] < prevHeight) {
+            return;
+        }
+        
+        visited[i][j] = true;
+        
+        // Explore 4 directions
         for (int[] dir : directions) {
-            int newRow = row + dir[0];
-            int newCol = col + dir[1];
-
-            if (newRow < 0 || newRow >= heights.length || newCol < 0 || newCol >= heights[0].length) {
-                continue;
-            }
-
-            if (reachable[newRow][newCol]) {
-                continue;
-            }
-
-            if (heights[newRow][newCol] >= heights[row][col]) {
-                dfs(newRow, newCol, reachable, heights);
-            }
+            int ni = i + dir[0];
+            int nj = j + dir[1];
+            dfs(heights, visited, ni, nj, heights[i][j]);
         }
     }
 }
