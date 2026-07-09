@@ -14,28 +14,26 @@
  * }
  */
 
- //destination FANG  NEETCODE 150
+ //engeniering digest
 class Solution {
     public int goodNodes(TreeNode root) {
-        return countGoodNodes(root,Integer.MIN_VALUE);
-
+        return helper(root,0,Integer.MIN_VALUE);
     }
 
-    private int countGoodNodes(TreeNode node,int maxSoFar){
-        if(node==null){
+    public int helper(TreeNode root,int ans,int curMax){
+        //base condition
+        if(root==null){
             return 0;
         }
-        int count=0;
+        int rootAnswer=0;
 
-        //cheak if the current node is a good node
-        if(node.val>=maxSoFar){
-            count=1;  //current node is a good node
-            maxSoFar=node.val;  //update the maximum value along the path
+        if(root.val>=curMax){
+            rootAnswer=1;
+            curMax=root.val;
         }
+        int lans=helper(root.left,ans,curMax);
+        int rans=helper(root.right,ans,curMax);
+        return lans+rans+rootAnswer;
 
-        //count good nodes in the left and right subtrees
-        count =count+countGoodNodes(node.left,maxSoFar);
-        count=count+countGoodNodes(node.right,maxSoFar);
-        return count;
     }
 }
