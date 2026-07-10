@@ -1,15 +1,66 @@
-//apna college beter aproach in article 
+//apna college notes
+//kadans algorithm
+//jaise hi negative ho jaye sum  use 0 kar do 
 class Solution {
     public int maxSubArray(int[] nums) {
-        int n=nums.length;
-        int [] dp=new int[n];
-        dp[0]=nums[0];
-        int maxSum=nums[0];
 
-        for(int i=1;i<n;i++){
-            dp[i]=Math.max(nums[i],nums[i]+dp[i-1]);
-            maxSum=Math.max(maxSum,dp[i]);
+        int maxsum = Integer.MIN_VALUE;
+        int cursum = 0;
+
+        for(int i = 0; i < nums.length; i++) {
+
+            cursum =cursum + nums[i];
+
+            maxsum = Math.max(maxsum, cursum);
+
+            if(cursum < 0) {
+                cursum = 0;
+            }
         }
-        return maxSum;
+
+        return maxsum;
     }
 }
+
+
+
+//agar bol dete ki max subarray bhi print karo to  2 variable aur jud jayege ansStart and ansend jo index dege kaha se kaha tak 
+
+// class Solution {
+//     public int maxSubArray(int[] nums) {
+
+//         int maxsum = Integer.MIN_VALUE;
+//         int cursum = 0;
+
+//         int start = 0;
+//         int ansStart = 0;
+//         int ansEnd = 0;
+
+//         for (int i = 0; i < nums.length; i++) {
+
+//             cursum = cursum + nums[i];
+
+//             if (cursum > maxsum) {
+//                 maxsum = cursum;
+//                 ansStart = start;
+//                 ansEnd = i;
+//             }
+
+//             if (cursum < 0) {
+//                 cursum = 0;
+//                 start = i + 1;
+//             }
+//         }
+
+//         System.out.print("Maximum Subarray : ");
+//         for (int i = ansStart; i <= ansEnd; i++) {
+//             System.out.print(nums[i] + " ");
+//         }
+
+//         System.out.println();
+//         System.out.println("Maximum Sum : " + maxsum);
+
+//         return maxsum;
+//     }
+// }
+
