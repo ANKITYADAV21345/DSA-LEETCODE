@@ -1,43 +1,36 @@
-//apna college
+//apna college article knive aproach
+class Solution
+{
+   private void helper(int[] nums, int target, int index, int n, List<Integer> current, Set<List<Integer>> set)   {
+       if (index == n) {
+           if (target == 0) {
+               set.add(new ArrayList<>(current));
+           }
+           return;
+       }
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
-class Solution {
+       // Not pick the current element
+       helper(nums, target, index + 1, n, current, set);
 
-    static Set<List<Integer>> set = new HashSet<>();
 
-    public static void getAllCombinations(int arr[], int idx, int target, List<List<Integer>> ans, List<Integer> combin) {
-        // base case 
-        if (idx == arr.length || target < 0) {
-            return;
-        }
+       // Pick the current element if it doesn't exceed the target
+       if (nums[index] <= target) {
+           current.add(nums[index]);
+           helper(nums, target - nums[index], index, n, current, set);
+           current.remove(current.size() - 1); // backtrack
+       }
+   }
 
-        if (target == 0) {
-            if (!set.contains(new ArrayList<>(combin))) {
-                set.add(new ArrayList<>(combin));
-                ans.add(new ArrayList<>(combin));  // Add to result
-            }
-            return;
-        }
 
-        // include current number (single or multiple times)
-        combin.add(arr[idx]);
-        getAllCombinations(arr, idx + 1, target - arr[idx], ans, combin);  // single choice
-        getAllCombinations(arr, idx, target - arr[idx], ans, combin);      // multiple choice
-        combin.remove(combin.size() - 1); // backtrack
 
-        // exclude current number
-        getAllCombinations(arr, idx + 1, target, ans, combin);
-    }
 
-    public List<List<Integer>> combinationSum(int[] arr, int target) {
-        set.clear(); // clear static set to avoid stale data
-        List<List<Integer>> ans = new ArrayList<>();
-        List<Integer> combin = new ArrayList<>();
-        getAllCombinations(arr, 0, target, ans, combin);
-        return ans;
+   public List<List<Integer>> combinationSum(int[] candidates, int target)
+   {
+       Set<List<Integer>> set = new HashSet<>();
+       List<Integer> tempList = new ArrayList<>();
+       helper(candidates, target, 0, candidates.length, tempList, set);
+      
+       return new ArrayList<>(set);
     }
 }
