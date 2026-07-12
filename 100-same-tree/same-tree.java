@@ -14,19 +14,11 @@
  * }
  */
 
+//apna college yt and notes  jaha isidentical ke name se karaya hai and ye ques subpart hai subtree of another tree
 
 
 
-
-
-
-// The intuition behind the solution is to recursively check if two binary trees are identical. If both trees are empty (null), they are considered identical. If only one tree is empty or the values of the current nodes are different, the trees are not identical. Otherwise, we recursively check if the left and right subtrees of both trees are identical.
-
-
-//recursive solution done by my own
-
-
-
+//The intuition behind the solution is to recursively check if two binary trees are identical. If both trees are empty (null), they are considered identical. If only one tree is empty or the values of the current nodes are different, the trees are not identical. Otherwise, we recursively check if the left and right subtrees of both trees are identical.
 
 class Solution {
     public boolean isSameTree(TreeNode root1, TreeNode root2) {
@@ -41,4 +33,4 @@ class Solution {
         // Recursively check if the left and right subtrees are identical
         return isSameTree(root1.left, root2.left) && isSameTree(root1.right, root2.right);
     }
-}
+} 
