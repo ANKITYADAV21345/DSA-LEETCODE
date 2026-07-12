@@ -1,22 +1,27 @@
-//apna college notes dp solution 
+//apna college notes recursion+memo
 class Solution {
+
     public int climbStairs(int n) {
 
-        int dp[] = new int[n + 1];
-        //eek bhi jump naji lagane ke 1 tarika 
-        dp[0] = 1;
+        int[] memo = new int[n + 1];
+        Arrays.fill(memo, -1);
 
-        for (int i = 1; i <= n; i++) {
-            
-            //1 jump lagane ka bhi 1 tarika continue iss liye likha taki  dp[i] = dp[i - 1] + dp[i - 2];  ye line na chale i=1 le liye  
-            if (i == 1) {
-                dp[i] = dp[i - 1];
-                continue;          
-            }
-            //2 ya use jyada jump lagane ke tarike  
-            dp[i] = dp[i - 1] + dp[i - 2];
-        }
+        return solve(n, memo);
+    }
 
-        return dp[n];
+    public int solve(int n, int[] memo) {
+
+        if (n == 0)
+            return 1;
+
+        if (n < 0)
+            return 0;
+
+        if (memo[n] != -1)
+            return memo[n];
+
+        memo[n] = solve(n - 1, memo) + solve(n - 2, memo);
+
+        return memo[n];
     }
 }
