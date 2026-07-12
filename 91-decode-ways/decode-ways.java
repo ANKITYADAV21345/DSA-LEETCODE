@@ -1,41 +1,42 @@
-//codebix recursion +memoisation
+//codebix tabulation
 class Solution {
     public int numDecodings(String s) {
-        int memo[]=new int[s.length()+1];
-        int ans=helper(s,0,memo);
+        int ans=tabulation(s);
         return ans;
     }
-
-    public int helper(String s,int index,int []memo){
-        //agar epmty string hai to 1 hi ratika hai
-        //"" 
-        if(index==s.length()){
-            return 1;
-        }
-
-        //agar "0" hai to ham kuch bhi decode nahi kar payege ise 
-        if(s.charAt(index)=='0'){
+    public int tabulation(String s){
+        //handle cases like"023" jaha pehla hi leter 0 ho to 0 return  (not posible) 
+        if(s==null||s.length()==0){
             return 0;
         }
+        int n=s.length();
+        int[] dp=new int[n+1];
+        
+        dp[0]=1;
 
-        //'1','2'
-        if(index==s.length()-1){
-            return 1;
+        if(s.charAt(0)!='0'){
+            //empty string ko decode karne ka eek tarika 
+            dp[1]=1;
+        }
+        else{
+            //agar starting me hi 0 aa gaya to 0 dal dehe 
+            dp[1]=0;
         }
 
-        if(memo[index]>0){
-            return memo[index];
+        for(int i=2;i<=n;i++){
+            //index concidered in first=[12)
+            //number 1123  value 1 is concidered at index 1 only
+            int first=Integer.valueOf(s.substring(i-1,i));
+            //index concidered in first=[02)
+            //number 1123  value 11 is concidered at index 0,1
+            int second=Integer.valueOf(s.substring(i-2,i));
+            if(first>=1 && first<=9){
+                dp[i]=dp[i]+dp[i-1];
+            }
+            if(second>=10 && second<=26){
+                dp[i]=dp[i]+dp[i-2];
+            }
         }
-
-        //single character concidered in way 1
-        int way1=helper(s,index+1,memo);
-        //2 character concidered in way 2
-        int way2=0;
-        if(Integer.parseInt(s.substring(index,index+2))<=26){  // ye condition cheak kar rahi hai ki agar ye 26 se choti hai to concider karo varna nahi
-            way2=helper(s,index+2,memo);
-        }
-
-        memo[index]=way1+way2;
-        return  memo[index];
+        return dp[n];
     }
 }
