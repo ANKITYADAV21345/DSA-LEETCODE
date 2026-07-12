@@ -2,6 +2,41 @@
 // -1 -> not calculated
 // 0  -> false
 // 1  -> true
+
+
+// Is solution me 3 variables (i, j, k) use kiye gaye hain, lekin k actually alag se rakhne ki zarurat nahi hai. Har recursive call me jab bhi i ya j ek step badhta hai, k bhi ek step badhta hai. Isliye hamesha:
+
+// k = i + j
+
+// hota hai.
+
+// Isi wajah se is problem ka optimal memoization sirf 2D DP (dp[i][j]) se ho jata hai. Ye 3D solution sahi hai, lekin extra memory use karta hai. Competitive programming aur interviews me aam taur par 2D DP approach ko prefer kiya jata hai.
+
+
+
+// solve(0,0,0)
+
+//            |
+//      a from s1
+//            |
+// solve(1,0,1)
+
+//            |
+//      c from s2
+//            |
+// solve(1,1,2)
+
+//            |
+//      b from s1
+//            |
+// solve(2,1,3)
+
+//            |
+//      d from s2
+//            |
+// solve(2,2,4)
+
+
 class Solution {
 
     int m, n, N;
